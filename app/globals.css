@@ -1,21 +1,1131 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --bg: #07090d;
+  --bg-soft: #0b0e14;
+  --panel: rgba(17, 21, 29, 0.72);
+  --panel-strong: rgba(20, 25, 34, 0.9);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-hover: rgba(255, 255, 255, 0.16);
+  --text: #f5f7fb;
+  --muted: #8d96a7;
+  --muted-light: #aeb6c5;
+  --green: #54d69b;
+  --green-soft: rgba(84, 214, 155, 0.12);
+  --red: #ff6f7d;
+  --blue: #6ea8ff;
+  --accent: #8ba7ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 12% 5%,
+      rgba(90, 117, 190, 0.14),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 88% 12%,
+      rgba(78, 123, 111, 0.1),
+      transparent 26%
+    ),
+    linear-gradient(
+      180deg,
+      #080a0f 0%,
+      #07090d 55%,
+      #06080c 100%
+    );
+  color: var(--text);
+  font-family:
+    "DM Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  width: min(1480px, calc(100% - 40px));
+  margin: 0 auto;
+  padding-bottom: 70px;
+}
+
+/* =========================================
+   NAV
+========================================= */
+
+.nav {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.brandMark {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: linear-gradient(
+    145deg,
+    rgba(139, 167, 255, 0.2),
+    rgba(255, 255, 255, 0.05)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 18px;
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.brandName {
+  font-family: "Manrope", sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+}
+
+.brandSub {
+  margin-top: 2px;
+  color: #697283;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.navStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #727b8c;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 12px rgba(84, 214, 155, 0.75);
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero {
+  min-height: 360px;
+  display: grid;
+  grid-template-columns: 1fr 390px;
+  align-items: center;
+  gap: 70px;
+  padding: 55px 20px 60px;
+}
+
+.heroEyebrow,
+.eyebrow {
+  color: #778195;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.hero h1 {
+  margin: 13px 0 18px;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(42px, 5vw, 70px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  font-weight: 800;
+}
+
+.hero h1 span {
+  color: #8fa8ff;
+}
+
+.heroContent p {
+  max-width: 570px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.heroCard {
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.018)
+    );
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(22px);
+}
+
+.heroCardLabel {
+  color: #727c8d;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.heroCardAddress {
+  margin-top: 17px;
+  font-family: "Manrope", sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.heroCardLocation {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.heroCardPrice {
+  margin-top: 30px;
+  font-family: "Manrope", sans-serif;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.searchPanel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 17px;
+}
+
+.searchBox {
+  flex: 1;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 17px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.035);
+  transition:
+    border 0.2s ease,
+    background 0.2s ease;
+}
+
+.searchBox:focus-within {
+  border-color: rgba(139, 167, 255, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.searchBox span {
+  color: #737d8e;
+  font-size: 21px;
+}
+
+.searchBox input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.searchBox input::placeholder {
+  color: #687182;
+}
+
+.filters {
+  display: flex;
+  gap: 6px;
+}
+
+.filter {
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #80899a;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.18s ease;
+}
+
+.filter:hover {
+  color: white;
+  border-color: var(--border-hover);
+}
+
+.filter.active {
+  color: white;
+  border-color: rgba(139, 167, 255, 0.3);
+  background: rgba(139, 167, 255, 0.11);
+}
+
+/* =========================================
+   PROPERTY STRIP
+========================================= */
+
+.propertyStrip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 9px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+}
+
+.propertyMini {
+  min-width: 0;
+  min-height: 148px;
+  padding: 15px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.propertyMini:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.propertyMini.active {
+  border-color: rgba(139, 167, 255, 0.38);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(139, 167, 255, 0.11),
+      rgba(255, 255, 255, 0.025)
+    );
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+}
+
+.miniTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #778195;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.miniTop b {
+  color: var(--green);
+}
+
+.propertyMini strong {
+  display: block;
+  margin-top: 13px;
+  overflow: hidden;
+  color: #f0f2f7;
+  font-family: "Manrope", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.propertyMini small {
+  display: block;
+  margin-top: 4px;
+  color: #737d8e;
+  font-size: 10px;
+}
+
+.miniBottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 21px;
+}
+
+.miniBottom b {
+  color: #e9ecf2;
+  font-size: 11px;
+}
+
+.miniBottom span {
+  color: #778195;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+/* =========================================
+   DASHBOARD
+========================================= */
+
+.dashboard {
+  margin-top: 25px;
+}
+
+.glass {
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.042),
+      rgba(255, 255, 255, 0.018)
+    );
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.16),
+    inset 0 1px rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(18px);
+}
+
+.propertyIntro {
+  min-height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 27px 30px;
+  border-radius: 20px;
+}
+
+.propertyIntro h2 {
+  margin: 9px 0 7px;
+  font-family: "Manrope", sans-serif;
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.propertyIntro p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.propertyIntro p span {
+  color: #555f70;
+}
+
+.scoreBox {
+  min-width: 145px;
+  padding-left: 28px;
+  border-left: 1px solid var(--border);
+}
+
+.scoreBox div {
+  color: #737d8e;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.scoreBox strong {
+  margin-top: 3px;
+  display: inline-block;
+  font-family: "Manrope", sans-serif;
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+
+.scoreBox span {
+  margin-left: 4px;
+  color: #677182;
+  font-size: 11px;
+}
+
+/* =========================================
+   METRICS
+========================================= */
+
+.snapshotGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.metric {
+  min-height: 138px;
+  padding: 22px;
+  border-radius: 16px;
+}
+
+.metric > span {
+  display: block;
+  color: #737d8e;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.metric strong {
+  display: block;
+  margin-top: 15px;
+  font-family: "Manrope", sans-serif;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.metric small {
+  display: block;
+  margin-top: 6px;
+  color: #626c7d;
+  font-size: 9px;
+}
+
+/* =========================================
+   MAIN GRID
+========================================= */
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.assumptions,
+.cashflow {
+  border-radius: 20px;
+  padding: 28px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sectionHeading h3 {
+  margin: 7px 0 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 19px;
+  letter-spacing: -0.035em;
+}
+
+.liveBadge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: #77d9ad;
+  background: var(--green-soft);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.liveBadge span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(84, 214, 155, 0.7);
+}
+
+/* =========================================
+   FIELDS
+========================================= */
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 14px;
+  margin-top: 28px;
+}
+
+.field label,
+.rateHeader label,
+.loanHeader label {
+  display: block;
+  color: #747e8f;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.inputMoney {
+  height: 47px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: rgba(0, 0, 0, 0.16);
+  transition: border 0.2s ease;
+}
+
+.inputMoney:focus-within {
+  border-color: rgba(139, 167, 255, 0.38);
+}
+
+.inputMoney span {
+  color: #7f899a;
+  font-size: 12px;
+}
+
+.inputMoney input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f2f4f8;
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.inputMoney input::-webkit-inner-spin-button,
+.inputMoney input::-webkit-outer-spin-button {
+  margin: 0;
+}
+
+.inputMoney em {
+  color: #626c7d;
+  font-size: 9px;
+  font-style: normal;
+}
+
+.field > small {
+  display: block;
+  margin-top: 6px;
+  color: #596374;
+  font-size: 8px;
+}
+
+/* =========================================
+   RATE
+========================================= */
+
+.rateSection {
+  margin-top: 29px;
+  padding-top: 25px;
+  border-top: 1px solid var(--border);
+}
+
+.rateHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rateHeader small {
+  display: block;
+  margin-top: 4px;
+  color: #5d6778;
+  font-size: 8px;
+}
+
+.rateHeader strong {
+  font-family: "Manrope", sans-serif;
+  font-size: 20px;
+}
+
+.range {
+  width: 100%;
+  height: 4px;
+  margin-top: 19px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.rangeLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  color: #586273;
+  font-size: 8px;
+}
+
+/* =========================================
+   LOAN
+========================================= */
+
+.loanSection {
+  margin-top: 26px;
+}
+
+.loanHeader {
+  display: grid;
+  grid-template-columns: 1fr 105px;
+  gap: 12px;
+}
+
+.loanControls {
+  display: grid;
+  grid-template-columns: 1fr 105px;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.segmented button {
+  min-height: 39px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #687284;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.segmented button.selected {
+  color: white;
+  background: rgba(139, 167, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(139, 167, 255, 0.12);
+}
+
+.loanControls select {
+  min-width: 0;
+  height: 45px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: 0;
+  background: #10141b;
+  color: #dce0e8;
+  font-size: 10px;
+}
+
+/* =========================================
+   LISTING BUTTON
+========================================= */
+
 .listingButton {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-top: 24px;
-  padding: 14px 18px;
-  border-radius: 14px;
+  min-height: 47px;
+  margin-top: 25px;
+  padding: 13px 18px;
+  border: 1px solid rgba(139, 167, 255, 0.22);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139, 167, 255, 0.13),
+      rgba(255, 255, 255, 0.035)
+    );
+  color: #e9edff;
   text-decoration: none;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: white;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  transition: all 0.2s ease;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  transition:
+    transform 0.18s ease,
+    border 0.18s ease,
+    background 0.18s ease;
 }
 
 .listingButton:hover {
-  background: rgba(255, 255, 255, 0.14);
   transform: translateY(-1px);
+  border-color: rgba(139, 167, 255, 0.42);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139, 167, 255, 0.2),
+      rgba(255, 255, 255, 0.05)
+    );
+}
+
+/* =========================================
+   CASH FLOW
+========================================= */
+
+.cashHero {
+  margin-top: 27px;
+  padding: 22px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.cashHero span {
+  display: block;
+  color: #737d8e;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.cashHero strong {
+  display: block;
+  margin-top: 10px;
+  font-family: "Manrope", sans-serif;
+  font-size: 35px;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.cashHero small {
+  display: block;
+  margin-top: 7px;
+  color: #657082;
+  font-size: 9px;
+}
+
+.breakdown {
+  margin-top: 20px;
+}
+
+.breakdown > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  min-height: 38px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.breakdown span {
+  color: #747e8f;
+  font-size: 10px;
+}
+
+.breakdown b {
+  color: #c9ced8;
+  font-size: 10px;
+}
+
+.breakdownTotal {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-bottom: 0 !important;
+}
+
+.breakdownTotal span {
+  color: #aeb6c4;
+  font-weight: 700;
+}
+
+.breakdownTotal strong {
+  font-family: "Manrope", sans-serif;
+  font-size: 15px;
+}
+
+.repayment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 21px;
+}
+
+.repayment > div {
+  padding: 15px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.repayment span {
+  display: block;
+  color: #697384;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.repayment strong {
+  display: block;
+  margin-top: 7px;
+  font-family: "Manrope", sans-serif;
+  font-size: 15px;
+}
+
+/* =========================================
+   COLOURS
+========================================= */
+
+.green {
+  color: var(--green) !important;
+}
+
+.red {
+  color: var(--red) !important;
+}
+
+.blue {
+  color: var(--blue) !important;
+}
+
+/* =========================================
+   FOOTER NOTE
+========================================= */
+
+.bottomNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-top: 10px;
+  padding: 20px 24px;
+  border-radius: 16px;
+}
+
+.noteIcon {
+  width: 27px;
+  height: 27px;
+  flex: 0 0 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: var(--green);
+  background: var(--green-soft);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.bottomNote strong {
+  font-family: "Manrope", sans-serif;
+  font-size: 11px;
+}
+
+.bottomNote p {
+  max-width: 900px;
+  margin: 5px 0 0;
+  color: #626c7d;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 1100px) {
+  .propertyStrip {
+    grid-template-columns: repeat(3, minmax(190px, 1fr));
+  }
+
+  .hero {
+    grid-template-columns: 1fr 330px;
+    gap: 35px;
+  }
+
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .app {
+    width: min(100% - 24px, 700px);
+  }
+
+  .nav {
+    height: 74px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 45px 4px;
+  }
+
+  .heroCard {
+    max-width: 500px;
+  }
+
+  .searchPanel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filters {
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .filter {
+    flex: 0 0 auto;
+  }
+
+  .propertyStrip {
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .propertyMini {
+    flex: 0 0 210px;
+  }
+
+  .snapshotGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .propertyIntro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .scoreBox {
+    width: 100%;
+    padding: 18px 0 0;
+    border-top: 1px solid var(--border);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .app {
+    width: calc(100% - 20px);
+  }
+
+  .brandName {
+    font-size: 12px;
+  }
+
+  .brandSub {
+    font-size: 7px;
+  }
+
+  .navStatus {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 35px;
+    padding-bottom: 40px;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .heroContent p {
+    font-size: 13px;
+  }
+
+  .heroCard {
+    padding: 21px;
+  }
+
+  .propertyIntro,
+  .assumptions,
+  .cashflow {
+    padding: 21px;
+  }
+
+  .propertyIntro h2 {
+    font-size: 20px;
+  }
+
+  .snapshotGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .loanHeader,
+  .loanControls {
+    grid-template-columns: 1fr;
+  }
+
+  .repayment {
+    grid-template-columns: 1fr;
+  }
+
+  .bottomNote {
+    padding: 17px;
+  }
 }
