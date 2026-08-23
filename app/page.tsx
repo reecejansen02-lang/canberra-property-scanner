@@ -82,11 +82,10 @@ function calculateMetrics(
   const annualCashFlow = annualRent - annualInterestCost - property.annualExpenses;
   const weeklyCashFlow = annualCashFlow / 52;
   
-  // Basic investment score: positive cash flow (50%), yield (30%), equity buffer (20%)
   const equityBuffer = ((property.purchasePrice - loanAmount) / property.purchasePrice) * 100;
   const cashFlowScore = annualCashFlow > 0 ? 50 : Math.max(0, 50 + (annualCashFlow / (annualRent / 2)));
-  const yieldScore = Math.min(30, (grossYield / 5) * 30); // Cap at 30 for 5% yield
-  const equityScore = Math.min(20, (equityBuffer / 50) * 20); // Cap at 20 for 50% equity
+  const yieldScore = Math.min(30, (grossYield / 5) * 30);
+  const equityScore = Math.min(20, (equityBuffer / 50) * 20);
   const investmentScore = Math.round(cashFlowScore + yieldScore + equityScore);
 
   return {
@@ -121,83 +120,97 @@ export default function Home() {
   const propertyToDisplay = selectedProperty || null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">🏠 Property Scanner</h1>
-          <p className="text-sm text-gray-600">ACT Investment Analysis</p>
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-slate-950/80 border-b border-slate-700/50 shadow-2xl">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center font-bold text-white text-lg">
+              🏠
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                Property Scanner
+              </h1>
+              <p className="text-sm text-slate-400">ACT Investment Analysis Dashboard</p>
+            </div>
+          </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         {/* Search & Filter Section */}
-        <section className="bg-white rounded-lg shadow-md p-4 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Search Address or Suburb
-            </label>
-            <input
-              type="text"
-              placeholder="e.g., Belconnen, Lake Drive..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-            />
-          </div>
+        <section className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-2xl hover:shadow-cyan-500/10 transition-all">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-200 mb-3">
+                🔍 Search Address or Suburb
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., Belconnen, Lake Drive..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-cyan-400 focus:border-transparent outline-none transition-all backdrop-blur"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Property Type
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {['All', 'House', 'Townhouse', 'Unit', 'Apartment'].map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setFilterType(type)}
-                  className={`px-4 py-2 rounded-lg font-medium transition ${
-                    filterType === type
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
+            <div>
+              <label className="block text-sm font-semibold text-slate-200 mb-3">
+                🏘️ Property Type
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {['All', 'House', 'Townhouse', 'Unit', 'Apartment'].map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setFilterType(type)}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                      filterType === type
+                        ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg shadow-cyan-500/50 scale-105'
+                        : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 border border-slate-600/50'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Properties List */}
           <section className="lg:col-span-1">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">
+            <h2 className="text-lg font-bold text-slate-100 mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full"></span>
               Available Properties ({filteredProperties.length})
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
               {filteredProperties.length > 0 ? (
                 filteredProperties.map((prop) => (
                   <button
                     key={prop.id}
                     onClick={() => setSelectedProperty(prop)}
-                    className={`w-full text-left p-4 rounded-lg border-2 transition ${
+                    className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                       selectedProperty?.id === prop.id
-                        ? 'bg-blue-50 border-blue-500'
-                        : 'bg-white border-gray-200 hover:border-blue-300'
+                        ? 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-400/50 shadow-lg shadow-cyan-500/20'
+                        : 'bg-slate-800/50 border-slate-700/50 hover:border-cyan-400/30 hover:bg-slate-700/50'
                     }`}
                   >
-                    <div className="font-bold text-gray-900">{prop.address}</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="font-bold text-slate-100 truncate">{prop.address}</div>
+                    <div className="text-sm text-slate-400 mt-1">
                       {prop.suburb} {prop.postcode}
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">{prop.type}</div>
-                    <div className="text-sm font-semibold text-blue-600 mt-2">
+                    <div className="text-xs text-slate-500 mt-1 inline-block bg-slate-700/50 px-2 py-1 rounded">
+                      {prop.type}
+                    </div>
+                    <div className="text-sm font-bold text-cyan-400 mt-3">
                       ${prop.purchasePrice.toLocaleString()}
                     </div>
                   </button>
                 ))
               ) : (
-                <p className="text-gray-500 text-center py-8">No properties found</p>
+                <p className="text-slate-400 text-center py-8">No properties found</p>
               )}
             </div>
           </section>
@@ -206,24 +219,24 @@ export default function Home() {
           {propertyToDisplay && metrics && (
             <section className="lg:col-span-2 space-y-4">
               {/* Property Details */}
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-2xl">
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
                   {propertyToDisplay.address}
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-slate-400 mb-6">
                   {propertyToDisplay.suburb} {propertyToDisplay.postcode} • {propertyToDisplay.type}
                 </p>
 
-                <div className="grid grid-cols-2 gap-4 pb-6 border-b border-gray-200">
+                <div className="grid grid-cols-2 gap-4 pb-6 border-b border-slate-700/50">
                   <div>
-                    <p className="text-sm text-gray-600">Purchase Price</p>
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="text-xs text-slate-400 uppercase tracking-wide">Purchase Price</p>
+                    <p className="text-2xl font-bold text-slate-100 mt-2">
                       ${propertyToDisplay.purchasePrice.toLocaleString()}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Weekly Rent</p>
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="text-xs text-slate-400 uppercase tracking-wide">Weekly Rent</p>
+                    <p className="text-2xl font-bold text-cyan-400 mt-2">
                       ${propertyToDisplay.weeklyRent}
                     </p>
                   </div>
@@ -231,10 +244,10 @@ export default function Home() {
 
                 {/* Loan Calculator */}
                 <div className="mt-6 space-y-4">
-                  <h4 className="font-bold text-gray-900">Investment Calculator</h4>
+                  <h4 className="font-bold text-slate-100">💰 Investment Calculator</h4>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Loan Amount: ${loanAmount ? loanAmount.toLocaleString() : 'Not set'}
+                    <label className="block text-sm font-medium text-slate-300 mb-3">
+                      Loan Amount: <span className="text-cyan-400 font-bold">${loanAmount ? loanAmount.toLocaleString() : (propertyToDisplay.purchasePrice * 0.8).toLocaleString()}</span>
                     </label>
                     <input
                       type="range"
@@ -243,67 +256,70 @@ export default function Home() {
                       step="10000"
                       value={loanAmount || propertyToDisplay.purchasePrice * 0.8}
                       onChange={(e) => setLoanAmount(parseInt(e.target.value))}
-                      className="w-full"
+                      className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
                     />
-                    <div className="text-xs text-gray-500 mt-1 flex justify-between">
+                    <div className="text-xs text-slate-400 mt-2 flex justify-between">
                       <span>$0</span>
                       <span>${propertyToDisplay.purchasePrice.toLocaleString()}</span>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Interest Rate: {propertyToDisplay.interestRate}%
-                    </label>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Annual Expenses: ${propertyToDisplay.annualExpenses.toLocaleString()}
-                    </label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-slate-400 uppercase tracking-wide">Interest Rate</p>
+                      <p className="text-lg font-bold text-slate-100 mt-2">{propertyToDisplay.interestRate}%</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400 uppercase tracking-wide">Annual Expenses</p>
+                      <p className="text-lg font-bold text-slate-100 mt-2">${propertyToDisplay.annualExpenses.toLocaleString()}</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Investment Metrics */}
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-md p-6 text-white">
-                <h4 className="text-lg font-bold mb-4">Investment Score</h4>
-                <div className="text-5xl font-bold mb-2">{metrics.investmentScore}</div>
-                <p className="text-blue-100">Out of 100</p>
+              {/* Investment Score */}
+              <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/50 rounded-2xl shadow-2xl shadow-cyan-500/20 p-8 text-center">
+                <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wide mb-3">Investment Score</h4>
+                <div className="text-6xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  {metrics.investmentScore}
+                </div>
+                <p className="text-slate-400 mt-2">Out of 100</p>
               </div>
 
               {/* Financial Breakdown */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded-lg shadow-md p-4">
-                  <p className="text-sm text-gray-600 mb-1">Gross Rental Yield</p>
-                  <p className="text-2xl font-bold text-green-600">{metrics.grossYield.toFixed(2)}%</p>
+                <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 shadow-lg hover:shadow-cyan-500/10 transition-all">
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">Gross Yield</p>
+                  <p className="text-2xl font-bold text-emerald-400 mt-2">{metrics.grossYield.toFixed(2)}%</p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-4">
-                  <p className="text-sm text-gray-600 mb-1">Annual Rent</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 shadow-lg hover:shadow-cyan-500/10 transition-all">
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">Annual Rent</p>
+                  <p className="text-2xl font-bold text-slate-100 mt-2">
                     ${metrics.annualRent.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-4">
-                  <p className="text-sm text-gray-600 mb-1">Annual Interest</p>
-                  <p className="text-2xl font-bold text-orange-600">
+                <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 shadow-lg hover:shadow-cyan-500/10 transition-all">
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">Annual Interest</p>
+                  <p className="text-2xl font-bold text-orange-400 mt-2">
                     -${metrics.annualInterestCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </p>
                 </div>
-                <div className={`bg-white rounded-lg shadow-md p-4 ${
-                  metrics.annualCashFlow >= 0 ? 'border-2 border-green-500' : 'border-2 border-red-500'
+                <div className={`backdrop-blur-xl bg-slate-800/50 border-2 rounded-xl p-4 shadow-lg transition-all ${
+                  metrics.annualCashFlow >= 0 
+                    ? 'border-emerald-400/50 shadow-emerald-500/20' 
+                    : 'border-red-400/50 shadow-red-500/20'
                 }`}>
-                  <p className="text-sm text-gray-600 mb-1">Annual Cash Flow</p>
-                  <p className={`text-2xl font-bold ${
-                    metrics.annualCashFlow >= 0 ? 'text-green-600' : 'text-red-600'
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">Annual Cash Flow</p>
+                  <p className={`text-2xl font-bold mt-2 ${
+                    metrics.annualCashFlow >= 0 ? 'text-emerald-400' : 'text-red-400'
                   }`}>
                     ${metrics.annualCashFlow.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-4">
-                  <p className="text-sm text-gray-600 mb-1">Weekly Cash Flow</p>
-                  <p className={`text-2xl font-bold ${
-                    metrics.weeklyCashFlow >= 0 ? 'text-green-600' : 'text-red-600'
+                <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 shadow-lg hover:shadow-cyan-500/10 transition-all col-span-2">
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">Weekly Cash Flow</p>
+                  <p className={`text-2xl font-bold mt-2 ${
+                    metrics.weeklyCashFlow >= 0 ? 'text-emerald-400' : 'text-red-400'
                   }`}>
                     ${metrics.weeklyCashFlow.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                   </p>
@@ -314,17 +330,18 @@ export default function Home() {
 
           {/* Empty State */}
           {!propertyToDisplay && (
-            <section className="lg:col-span-2 bg-gray-50 rounded-lg p-8 text-center">
-              <p className="text-gray-500 text-lg">Select a property to view analysis</p>
+            <section className="lg:col-span-2 backdrop-blur-xl bg-slate-800/30 border border-slate-700/50 rounded-2xl p-12 text-center">
+              <p className="text-3xl mb-3">👈</p>
+              <p className="text-slate-300 text-lg">Select a property to view detailed analysis</p>
             </section>
           )}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="mt-12 bg-gray-100 border-t border-gray-200 py-6">
-        <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-600">
-          <p>Canberra Property Scanner v0.1.0 • Sample data for demonstration</p>
+      <footer className="mt-16 border-t border-slate-700/50 py-8 px-6">
+        <div className="max-w-7xl mx-auto text-center text-sm text-slate-400">
+          <p>✨ Canberra Property Scanner v0.2.0 • Modern Edition • Sample data for demonstration</p>
         </div>
       </footer>
     </div>
