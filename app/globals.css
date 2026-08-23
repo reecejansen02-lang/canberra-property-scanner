@@ -18,3 +18,54 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
 }
+select {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px 12px;
+  border: 1px solid #d9dce2;
+  border-radius: 10px;
+  outline: none;
+  background: white;
+}
+
+.loanType {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid #eceef1;
+}
+
+.loanType > span {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #646a74;
+  margin-bottom: 8px;
+}
+
+.loanButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.loanButtons button {
+  flex: 1;
+  padding: 11px 12px;
+  border: 1px solid #d9dce2;
+  border-radius: 10px;
+  background: white;
+  color: #555b66;
+  font-weight: 700;
+}
+
+.loanButtons button.selected {
+  background: #191b20;
+  color: white;
+  border-color: #191b20;
+}
+
+@media (max-width: 600px) {
+  .loanButtons {
+    flex-direction: column;
+  }
+}
