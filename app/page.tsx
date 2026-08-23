@@ -11,7 +11,7 @@ interface Property {
   purchasePrice: number;
   weeklyRent: number;
   annualExpenses: number;
-  interestRate: number;
+  defaultInterestRate: number;
 }
 
 const SAMPLE_PROPERTIES: Property[] = [
@@ -24,7 +24,7 @@ const SAMPLE_PROPERTIES: Property[] = [
     purchasePrice: 750000,
     weeklyRent: 450,
     annualExpenses: 2400,
-    interestRate: 5.5,
+    defaultInterestRate: 5.5,
   },
   {
     id: '2',
@@ -35,7 +35,7 @@ const SAMPLE_PROPERTIES: Property[] = [
     purchasePrice: 550000,
     weeklyRent: 350,
     annualExpenses: 1800,
-    interestRate: 5.5,
+    defaultInterestRate: 5.5,
   },
   {
     id: '3',
@@ -46,7 +46,7 @@ const SAMPLE_PROPERTIES: Property[] = [
     purchasePrice: 400000,
     weeklyRent: 280,
     annualExpenses: 1200,
-    interestRate: 5.5,
+    defaultInterestRate: 5.5,
   },
   {
     id: '4',
@@ -57,7 +57,7 @@ const SAMPLE_PROPERTIES: Property[] = [
     purchasePrice: 480000,
     weeklyRent: 320,
     annualExpenses: 1500,
-    interestRate: 5.5,
+    defaultInterestRate: 5.5,
   },
 ];
 
@@ -73,11 +73,12 @@ interface InvestmentMetrics {
 
 function calculateMetrics(
   property: Property,
-  loanAmount: number
+  loanAmount: number,
+  interestRate: number
 ): InvestmentMetrics {
   const annualRent = property.weeklyRent * 52;
   const grossYield = (annualRent / property.purchasePrice) * 100;
-  const annualInterestCost = (loanAmount * property.interestRate) / 100;
+  const annualInterestCost = (loanAmount * interestRate) / 100;
   const weeklyInterestCost = annualInterestCost / 52;
   const annualCashFlow = annualRent - annualInterestCost - property.annualExpenses;
   const weeklyCashFlow = annualCashFlow / 52;
@@ -103,6 +104,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [loanAmount, setLoanAmount] = useState(0);
+  const [interestRate, setInterestRate] = useState(5.5);
   const [filterType, setFilterType] = useState<string>('All');
 
   const filteredProperties = SAMPLE_PROPERTIES.filter((prop) => {
@@ -114,7 +116,7 @@ export default function Home() {
   });
 
   const metrics = selectedProperty
-    ? calculateMetrics(selectedProperty, loanAmount || selectedProperty.purchasePrice * 0.8)
+    ? calculateMetrics(selectedProperty, loanAmount || selectedProperty.purchasePrice * 0.8, interestRate)
     : null;
 
   const propertyToDisplay = selectedProperty || null;
@@ -243,8 +245,10 @@ export default function Home() {
                 </div>
 
                 {/* Loan Calculator */}
-                <div className="mt-6 space-y-4">
+                <div className="mt-6 space-y-5">
                   <h4 className="font-bold text-slate-100">💰 Investment Calculator</h4>
+                  
+                  {/* Loan Amount */}
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-3">
                       Loan Amount: <span className="text-cyan-400 font-bold">${loanAmount ? loanAmount.toLocaleString() : (propertyToDisplay.purchasePrice * 0.8).toLocaleString()}</span>
@@ -264,11 +268,28 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-slate-400 uppercase tracking-wide">Interest Rate</p>
-                      <p className="text-lg font-bold text-slate-100 mt-2">{propertyToDisplay.interestRate}%</p>
+                  {/* Interest Rate */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-3">
+                      Interest Rate: <span className="text-cyan-400 font-bold">{interestRate.toFixed(2)}%</span>
+                    </label>
+                    <input
+                      type="range"
+                      min="2"
+                      max="10"
+                      step="0.1"
+                      value={interestRate}
+                      onChange={(e) => setInterestRate(parseFloat(e.target.value))}
+                      className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                    />
+                    <div className="text-xs text-slate-400 mt-2 flex justify-between">
+                      <span>2%</span>
+                      <span>10%</span>
                     </div>
+                  </div>
+
+                  {/* Annual Expenses */}
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-xs text-slate-400 uppercase tracking-wide">Annual Expenses</p>
                       <p className="text-lg font-bold text-slate-100 mt-2">${propertyToDisplay.annualExpenses.toLocaleString()}</p>
