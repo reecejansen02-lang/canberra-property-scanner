@@ -7,57 +7,312 @@ type Property = {
   address: string;
   suburb: string;
   type: string;
-  price: number;
+  price: number | null;
+  priceDisplay: string;
   rent: number;
   landValue: number;
   beds: number;
   baths: number;
+  cars: number;
+  landSize?: number;
+  listingUrl?: string;
+  rentSource?: string;
 };
 
 const properties: Property[] = [
   {
     id: 1,
-    address: "12 Example Street",
-    suburb: "Gungahlin",
-    type: "House",
-    price: 695000,
+    address: "19/11 Starcevich Crescent",
+    suburb: "Jacka",
+    type: "Townhouse",
+    price: null,
+    priceDisplay: "Auction",
     rent: 680,
-    landValue: 390000,
-    beds: 3,
+    landValue: 0,
+    beds: 2,
     baths: 2,
+    cars: 2,
+    landSize: 93,
+    listingUrl:
+      "https://www.realestate.com.au/property-townhouse-act-jacka-152097148",
   },
   {
     id: 2,
-    address: "48 Sample Avenue",
-    suburb: "Belconnen",
+    address: "10/147 Bill Ferguson Circuit",
+    suburb: "Bonner",
     type: "Townhouse",
-    price: 575000,
-    rent: 590,
-    landValue: 310000,
+    price: 730000,
+    priceDisplay: "$730,000+",
+    rent: 680,
+    landValue: 0,
     beds: 3,
     baths: 2,
+    cars: 2,
+    landSize: 152,
+    listingUrl:
+      "https://www.realestate.com.au/property-townhouse-act-bonner-151418112",
+    rentSource: "Previous advertised lease",
   },
   {
     id: 3,
-    address: "7 Demo Place",
-    suburb: "Tuggeranong",
-    type: "Unit",
-    price: 455000,
-    rent: 520,
-    landValue: 250000,
+    address: "307/100 De Burgh Street",
+    suburb: "Lyneham",
+    type: "Apartment",
+    price: 639000,
+    priceDisplay: "$639,000+",
+    rent: 600,
+    landValue: 0,
     beds: 2,
-    baths: 1,
+    baths: 2,
+    cars: 2,
+    landSize: 78,
+    listingUrl:
+      "https://www.realestate.com.au/property-apartment-act-lyneham-152096712",
   },
   {
     id: 4,
-    address: "91 Test Crescent",
-    suburb: "Casey",
+    address: "206/70 Allara Street",
+    suburb: "City",
+    type: "Apartment",
+    price: 1029900,
+    priceDisplay: "$1,029,900",
+    rent: 850,
+    landValue: 0,
+    beds: 3,
+    baths: 2,
+    cars: 2,
+    landSize: 107,
+    listingUrl:
+      "https://www.realestate.com.au/property-apartment-act-city-151241276",
+  },
+  {
+    id: 5,
+    address: "103/72 Allara Street",
+    suburb: "City",
+    type: "Apartment",
+    price: 780900,
+    priceDisplay: "$780,900",
+    rent: 700,
+    landValue: 0,
+    beds: 2,
+    baths: 2,
+    cars: 1,
+    landSize: 83,
+    listingUrl:
+      "https://www.realestate.com.au/property-apartment-act-city-151241016",
+  },
+  {
+    id: 6,
+    address: "10 Helmrich Street",
+    suburb: "Moncrieff",
     type: "House",
-    price: 780000,
-    rent: 720,
-    landValue: 430000,
+    price: 1100000,
+    priceDisplay: "$1.1m+",
+    rent: 750,
+    landValue: 0,
     beds: 4,
     baths: 2,
+    cars: 2,
+    landSize: 468,
+  },
+  {
+    id: 7,
+    address: "18 Carmody Street",
+    suburb: "Casey",
+    type: "House",
+    price: 1039000,
+    priceDisplay: "$1.039m+",
+    rent: 720,
+    landValue: 0,
+    beds: 4,
+    baths: 2,
+    cars: 2,
+    landSize: 447,
+  },
+  {
+    id: 8,
+    address: "24/1 Bon Scott Crescent",
+    suburb: "Moncrieff",
+    type: "Townhouse",
+    price: 719000,
+    priceDisplay: "$719,000+",
+    rent: 650,
+    landValue: 0,
+    beds: 3,
+    baths: 2,
+    cars: 2,
+    landSize: 146,
+  },
+  {
+    id: 9,
+    address: "15/16 Everist Street",
+    suburb: "Taylor",
+    type: "Townhouse",
+    price: 588000,
+    priceDisplay: "$588,000+",
+    rent: 580,
+    landValue: 0,
+    beds: 2,
+    baths: 2,
+    cars: 2,
+    landSize: 106,
+  },
+  {
+    id: 10,
+    address: "18/2 Romano Street",
+    suburb: "Denman Prospect",
+    type: "Townhouse",
+    price: 795000,
+    priceDisplay: "$795,000+",
+    rent: 680,
+    landValue: 0,
+    beds: 3,
+    baths: 2,
+    cars: 2,
+    landSize: 180,
+  },
+  {
+    id: 11,
+    address: "66/41 Philip Hodgins Street",
+    suburb: "Wright",
+    type: "Townhouse",
+    price: 690000,
+    priceDisplay: "$690,000",
+    rent: 620,
+    landValue: 0,
+    beds: 3,
+    baths: 2,
+    cars: 2,
+    landSize: 171,
+  },
+  {
+    id: 12,
+    address: "34/4 Skuta Place",
+    suburb: "Denman Prospect",
+    type: "Townhouse",
+    price: 900000,
+    priceDisplay: "$900,000+",
+    rent: 750,
+    landValue: 0,
+    beds: 4,
+    baths: 3,
+    cars: 2,
+    landSize: 205,
+  },
+  {
+    id: 13,
+    address: "4/2 Bellette Street",
+    suburb: "Weston",
+    type: "Townhouse",
+    price: 709000,
+    priceDisplay: "$709,000+",
+    rent: 620,
+    landValue: 0,
+    beds: 3,
+    baths: 2,
+    cars: 2,
+  },
+  {
+    id: 14,
+    address: "16/31 Moyes Crescent",
+    suburb: "Holt",
+    type: "Townhouse",
+    price: 590000,
+    priceDisplay: "$590,000",
+    rent: 560,
+    landValue: 0,
+    beds: 2,
+    baths: 1,
+    cars: 1,
+    landSize: 82,
+  },
+  {
+    id: 15,
+    address: "8/4 Lind Close",
+    suburb: "Fraser",
+    type: "Townhouse",
+    price: 780000,
+    priceDisplay: "Offers over $780,000",
+    rent: 650,
+    landValue: 0,
+    beds: 3,
+    baths: 2,
+    cars: 2,
+    landSize: 141,
+  },
+  {
+    id: 16,
+    address: "5/21 Temperley Street",
+    suburb: "Nicholls",
+    type: "Townhouse",
+    price: 0,
+    priceDisplay: "Contact Agent",
+    rent: 650,
+    landValue: 0,
+    beds: 3,
+    baths: 2,
+    cars: 2,
+    landSize: 165,
+    listingUrl:
+      "https://www.realestate.com.au/property-townhouse-act-nicholls-151523264",
+  },
+  {
+    id: 17,
+    address: "8 Quandong Street",
+    suburb: "O'Connor",
+    type: "House",
+    price: 1320000,
+    priceDisplay: "$1,320,000",
+    rent: 700,
+    landValue: 0,
+    beds: 3,
+    baths: 1,
+    cars: 1,
+    landSize: 670,
+  },
+  {
+    id: 18,
+    address: "2 Parkhill Street",
+    suburb: "Pearce",
+    type: "House",
+    price: null,
+    priceDisplay: "Auction",
+    rent: 750,
+    landValue: 0,
+    beds: 4,
+    baths: 2,
+    cars: 3,
+    landSize: 1132,
+  },
+  {
+    id: 19,
+    address: "294 Goyder Street",
+    suburb: "Narrabundah",
+    type: "House",
+    price: null,
+    priceDisplay: "Auction",
+    rent: 650,
+    landValue: 0,
+    beds: 3,
+    baths: 1,
+    cars: 1,
+    landSize: 714,
+  },
+  {
+    id: 20,
+    address: "12 Hensman Street",
+    suburb: "Latham",
+    type: "House",
+    price: 999000,
+    priceDisplay: "$999,000+",
+    rent: 700,
+    landValue: 0,
+    beds: 4,
+    baths: 2,
+    cars: 2,
+    landSize: 1131,
+    listingUrl:
+      "https://www.realestate.com.au/property-house-act-latham-151972712",
   },
 ];
 
@@ -74,9 +329,9 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [propertyFilter, setPropertyFilter] = useState("All");
 
-  const [price, setPrice] = useState(selected.price);
+  const [price, setPrice] = useState(selected.price ?? 0);
   const [rent, setRent] = useState(selected.rent);
-  const [loan, setLoan] = useState(selected.price);
+  const [loan, setLoan] = useState(selected.price ?? 0);
   const [interest, setInterest] = useState(6);
   const [expenses, setExpenses] = useState(7500);
   const [loanTerm, setLoanTerm] = useState(30);
@@ -115,12 +370,15 @@ export default function Home() {
       annualInterest = loan * (interest / 100);
       monthlyRepayment = annualInterest / 12;
       annualLoanRepayment = annualInterest;
-      annualPrincipal = 0;
     } else if (monthlyRate === 0) {
-      monthlyRepayment = loan / payments;
-      annualLoanRepayment = monthlyRepayment * 12;
+      monthlyRepayment =
+        payments > 0 ? loan / payments : 0;
+
+      annualLoanRepayment =
+        monthlyRepayment * 12;
+
       annualPrincipal = annualLoanRepayment;
-    } else {
+    } else if (loan > 0) {
       monthlyRepayment =
         loan *
         ((monthlyRate *
@@ -164,17 +422,20 @@ export default function Home() {
     const weeklyCashFlow =
       annualCashFlow / 52;
 
-    const score = Math.max(
-      0,
-      Math.min(
-        100,
-        Math.round(
-          50 +
-            (grossYield - 4) * 12 +
-            weeklyCashFlow / 100
-        )
-      )
-    );
+    const score =
+      price > 0
+        ? Math.max(
+            0,
+            Math.min(
+              100,
+              Math.round(
+                50 +
+                  (grossYield - 4) * 12 +
+                  weeklyCashFlow / 100
+              )
+            )
+          )
+        : 0;
 
     return {
       annualRent,
@@ -200,11 +461,11 @@ export default function Home() {
   function selectProperty(property: Property) {
     setSelected(property);
 
-    setPrice(property.price);
-    setRent(property.rent);
+    const nextPrice = property.price ?? 0;
 
-    // Default to 100% borrowing
-    setLoan(property.price);
+    setPrice(nextPrice);
+    setRent(property.rent);
+    setLoan(nextPrice);
   }
 
   return (
@@ -262,7 +523,7 @@ export default function Home() {
           </div>
 
           <div className="heroCardPrice">
-            {money(price)}
+            {selected.priceDisplay}
           </div>
         </div>
       </section>
@@ -285,7 +546,7 @@ export default function Home() {
             "All",
             "House",
             "Townhouse",
-            "Unit",
+            "Apartment",
           ].map((type) => (
             <button
               key={type}
@@ -307,9 +568,11 @@ export default function Home() {
       <section className="propertyStrip">
         {filteredProperties.map((property) => {
           const propertyYield =
-            (property.rent * 52) /
-            property.price *
-            100;
+            property.price && property.price > 0
+              ? ((property.rent * 52) /
+                  property.price) *
+                100
+              : null;
 
           const active =
             selected.id === property.id;
@@ -330,7 +593,9 @@ export default function Home() {
                 <span>{property.type}</span>
 
                 <b>
-                  {propertyYield.toFixed(1)}%
+                  {propertyYield !== null
+                    ? `${propertyYield.toFixed(1)}%`
+                    : "—"}
                 </b>
               </div>
 
@@ -344,11 +609,11 @@ export default function Home() {
 
               <div className="miniBottom">
                 <b>
-                  {money(property.price)}
+                  {property.priceDisplay}
                 </b>
 
                 <span>
-                  ${property.rent}/wk
+                  ${property.rent}/wk*
                 </span>
               </div>
             </button>
@@ -373,6 +638,14 @@ export default function Home() {
               {selected.beds} bed
               <span>•</span>
               {selected.baths} bath
+              <span>•</span>
+              {selected.cars} car
+              {selected.landSize ? (
+                <>
+                  <span>•</span>
+                  {selected.landSize}m²
+                </>
+              ) : null}
             </p>
           </div>
 
@@ -396,7 +669,7 @@ export default function Home() {
             </strong>
 
             <small>
-              Based on current rent
+              Based on current rent assumption
             </small>
           </div>
 
@@ -433,16 +706,16 @@ export default function Home() {
           </div>
 
           <div className="metric glass">
-            <span>LAND VALUE</span>
+            <span>LAND SIZE</span>
 
             <strong>
-              {money(
-                selected.landValue
-              )}
+              {selected.landSize
+                ? `${selected.landSize}m²`
+                : "—"}
             </strong>
 
             <small>
-              ACT unimproved value
+              Where available
             </small>
           </div>
         </div>
@@ -485,6 +758,13 @@ export default function Home() {
                     }
                   />
                 </div>
+
+                {selected.price === null && (
+                  <small>
+                    Enter a price to analyse this
+                    property.
+                  </small>
+                )}
               </div>
 
               <div className="field">
@@ -507,6 +787,10 @@ export default function Home() {
 
                   <em>/wk</em>
                 </div>
+
+                <small>
+                  *Initial estimate — editable
+                </small>
               </div>
 
               <div className="field">
@@ -662,6 +946,17 @@ export default function Home() {
                 </select>
               </div>
             </div>
+
+            {selected.listingUrl && (
+              <a
+                href={selected.listingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="listingButton"
+              >
+                View original listing ↗
+              </a>
+            )}
           </div>
 
           <div className="glass cashflow">
@@ -814,15 +1109,18 @@ export default function Home() {
 
           <div>
             <strong>
-              V1 investment engine
+              V1 live Canberra dataset
             </strong>
 
             <p>
-              These calculations are estimates.
-              Next we'll connect legitimate ACT
-              property data, sales history and rental
-              evidence so the scanner can analyse
-              real properties automatically.
+              Properties are based on current
+              Canberra market listings. Asking
+              prices marked as auction/contact
+              agent are intentionally not guessed.
+              Rental figures are initial editable
+              assumptions and should be replaced
+              with verified rental evidence as we
+              build the data integration.
             </p>
           </div>
         </div>
