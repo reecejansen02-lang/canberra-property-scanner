@@ -1,320 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-type Property = {
-  id: number;
-  address: string;
-  suburb: string;
-  type: string;
-  price: number | null;
-  priceDisplay: string;
-  rent: number;
-  landValue: number;
-  beds: number;
-  baths: number;
-  cars: number;
-  landSize?: number;
-  listingUrl?: string;
-  rentSource?: string;
-};
-
-const properties: Property[] = [
-  {
-    id: 1,
-    address: "19/11 Starcevich Crescent",
-    suburb: "Jacka",
-    type: "Townhouse",
-    price: null,
-    priceDisplay: "Auction",
-    rent: 680,
-    landValue: 0,
-    beds: 2,
-    baths: 2,
-    cars: 2,
-    landSize: 93,
-    listingUrl:
-      "https://www.realestate.com.au/property-townhouse-act-jacka-152097148",
-  },
-  {
-    id: 2,
-    address: "10/147 Bill Ferguson Circuit",
-    suburb: "Bonner",
-    type: "Townhouse",
-    price: 730000,
-    priceDisplay: "$730,000+",
-    rent: 680,
-    landValue: 0,
-    beds: 3,
-    baths: 2,
-    cars: 2,
-    landSize: 152,
-    listingUrl:
-      "https://www.realestate.com.au/property-townhouse-act-bonner-151418112",
-    rentSource: "Previous advertised lease",
-  },
-  {
-    id: 3,
-    address: "307/100 De Burgh Street",
-    suburb: "Lyneham",
-    type: "Apartment",
-    price: 639000,
-    priceDisplay: "$639,000+",
-    rent: 600,
-    landValue: 0,
-    beds: 2,
-    baths: 2,
-    cars: 2,
-    landSize: 78,
-    listingUrl:
-      "https://www.realestate.com.au/property-apartment-act-lyneham-152096712",
-  },
-  {
-    id: 4,
-    address: "206/70 Allara Street",
-    suburb: "City",
-    type: "Apartment",
-    price: 1029900,
-    priceDisplay: "$1,029,900",
-    rent: 850,
-    landValue: 0,
-    beds: 3,
-    baths: 2,
-    cars: 2,
-    landSize: 107,
-    listingUrl:
-      "https://www.realestate.com.au/property-apartment-act-city-151241276",
-  },
-  {
-    id: 5,
-    address: "103/72 Allara Street",
-    suburb: "City",
-    type: "Apartment",
-    price: 780900,
-    priceDisplay: "$780,900",
-    rent: 700,
-    landValue: 0,
-    beds: 2,
-    baths: 2,
-    cars: 1,
-    landSize: 83,
-    listingUrl:
-      "https://www.realestate.com.au/property-apartment-act-city-151241016",
-  },
-  {
-    id: 6,
-    address: "10 Helmrich Street",
-    suburb: "Moncrieff",
-    type: "House",
-    price: 1100000,
-    priceDisplay: "$1.1m+",
-    rent: 750,
-    landValue: 0,
-    beds: 4,
-    baths: 2,
-    cars: 2,
-    landSize: 468,
-  },
-  {
-    id: 7,
-    address: "18 Carmody Street",
-    suburb: "Casey",
-    type: "House",
-    price: 1039000,
-    priceDisplay: "$1.039m+",
-    rent: 720,
-    landValue: 0,
-    beds: 4,
-    baths: 2,
-    cars: 2,
-    landSize: 447,
-  },
-  {
-    id: 8,
-    address: "24/1 Bon Scott Crescent",
-    suburb: "Moncrieff",
-    type: "Townhouse",
-    price: 719000,
-    priceDisplay: "$719,000+",
-    rent: 650,
-    landValue: 0,
-    beds: 3,
-    baths: 2,
-    cars: 2,
-    landSize: 146,
-  },
-  {
-    id: 9,
-    address: "15/16 Everist Street",
-    suburb: "Taylor",
-    type: "Townhouse",
-    price: 588000,
-    priceDisplay: "$588,000+",
-    rent: 580,
-    landValue: 0,
-    beds: 2,
-    baths: 2,
-    cars: 2,
-    landSize: 106,
-  },
-  {
-    id: 10,
-    address: "18/2 Romano Street",
-    suburb: "Denman Prospect",
-    type: "Townhouse",
-    price: 795000,
-    priceDisplay: "$795,000+",
-    rent: 680,
-    landValue: 0,
-    beds: 3,
-    baths: 2,
-    cars: 2,
-    landSize: 180,
-  },
-  {
-    id: 11,
-    address: "66/41 Philip Hodgins Street",
-    suburb: "Wright",
-    type: "Townhouse",
-    price: 690000,
-    priceDisplay: "$690,000",
-    rent: 620,
-    landValue: 0,
-    beds: 3,
-    baths: 2,
-    cars: 2,
-    landSize: 171,
-  },
-  {
-    id: 12,
-    address: "34/4 Skuta Place",
-    suburb: "Denman Prospect",
-    type: "Townhouse",
-    price: 900000,
-    priceDisplay: "$900,000+",
-    rent: 750,
-    landValue: 0,
-    beds: 4,
-    baths: 3,
-    cars: 2,
-    landSize: 205,
-  },
-  {
-    id: 13,
-    address: "4/2 Bellette Street",
-    suburb: "Weston",
-    type: "Townhouse",
-    price: 709000,
-    priceDisplay: "$709,000+",
-    rent: 620,
-    landValue: 0,
-    beds: 3,
-    baths: 2,
-    cars: 2,
-  },
-  {
-    id: 14,
-    address: "16/31 Moyes Crescent",
-    suburb: "Holt",
-    type: "Townhouse",
-    price: 590000,
-    priceDisplay: "$590,000",
-    rent: 560,
-    landValue: 0,
-    beds: 2,
-    baths: 1,
-    cars: 1,
-    landSize: 82,
-  },
-  {
-    id: 15,
-    address: "8/4 Lind Close",
-    suburb: "Fraser",
-    type: "Townhouse",
-    price: 780000,
-    priceDisplay: "Offers over $780,000",
-    rent: 650,
-    landValue: 0,
-    beds: 3,
-    baths: 2,
-    cars: 2,
-    landSize: 141,
-  },
-  {
-    id: 16,
-    address: "5/21 Temperley Street",
-    suburb: "Nicholls",
-    type: "Townhouse",
-    price: 0,
-    priceDisplay: "Contact Agent",
-    rent: 650,
-    landValue: 0,
-    beds: 3,
-    baths: 2,
-    cars: 2,
-    landSize: 165,
-    listingUrl:
-      "https://www.realestate.com.au/property-townhouse-act-nicholls-151523264",
-  },
-  {
-    id: 17,
-    address: "8 Quandong Street",
-    suburb: "O'Connor",
-    type: "House",
-    price: 1320000,
-    priceDisplay: "$1,320,000",
-    rent: 700,
-    landValue: 0,
-    beds: 3,
-    baths: 1,
-    cars: 1,
-    landSize: 670,
-  },
-  {
-    id: 18,
-    address: "2 Parkhill Street",
-    suburb: "Pearce",
-    type: "House",
-    price: null,
-    priceDisplay: "Auction",
-    rent: 750,
-    landValue: 0,
-    beds: 4,
-    baths: 2,
-    cars: 3,
-    landSize: 1132,
-  },
-  {
-    id: 19,
-    address: "294 Goyder Street",
-    suburb: "Narrabundah",
-    type: "House",
-    price: null,
-    priceDisplay: "Auction",
-    rent: 650,
-    landValue: 0,
-    beds: 3,
-    baths: 1,
-    cars: 1,
-    landSize: 714,
-  },
-  {
-    id: 20,
-    address: "12 Hensman Street",
-    suburb: "Latham",
-    type: "House",
-    price: 999000,
-    priceDisplay: "$999,000+",
-    rent: 700,
-    landValue: 0,
-    beds: 4,
-    baths: 2,
-    cars: 2,
-    landSize: 1131,
-    listingUrl:
-      "https://www.realestate.com.au/property-house-act-latham-151972712",
-  },
-];
+import { properties, Property } from "./properties";
 
 const money = (value: number) =>
   new Intl.NumberFormat("en-AU", {
@@ -323,67 +10,488 @@ const money = (value: number) =>
     maximumFractionDigits: 0,
   }).format(value);
 
+const number = (value: number) =>
+  new Intl.NumberFormat("en-AU").format(value);
+
+function calculateProperty(property: Property) {
+  const price = property.price ?? 0;
+  const annualRent = property.rent * 52;
+
+  const grossYield =
+    price > 0 ? (annualRent / price) * 100 : 0;
+
+  /*
+   * V1 default financing:
+   * 100% borrowing at 6% P&I over 30 years.
+   */
+  const loan = price;
+  const rate = 0.06 / 12;
+  const payments = 30 * 12;
+
+  let annualLoan = 0;
+
+  if (loan > 0) {
+    const monthly =
+      rate === 0
+        ? loan / payments
+        : loan *
+          ((rate * Math.pow(1 + rate, payments)) /
+            (Math.pow(1 + rate, payments) - 1));
+
+    annualLoan = monthly * 12;
+  }
+
+  /*
+   * Simple V1 expense assumption.
+   * This is deliberately visible to the user rather than
+   * pretending we know the actual expenses for each property.
+   */
+  const annualExpenses = 7500;
+
+  const annualCashFlow =
+    annualRent - annualLoan - annualExpenses;
+
+  const weeklyCashFlow =
+    annualCashFlow / 52;
+
+  /*
+   * Investment score is NOT a valuation.
+   * It is simply a ranking mechanism for this app.
+   */
+  const yieldScore = Math.min(grossYield * 10, 40);
+  const growthScore = Math.min(
+    property.capitalGrowth * 5,
+    25
+  );
+
+  const cashScore = Math.max(
+    Math.min(weeklyCashFlow / 10, 25),
+    -20
+  );
+
+  const priceScore =
+    price > 0
+      ? Math.max(0, 15 - price / 150000)
+      : 5;
+
+  const score = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        35 +
+          yieldScore +
+          growthScore +
+          cashScore +
+          priceScore
+      )
+    )
+  );
+
+  return {
+    annualRent,
+    grossYield,
+    annualLoan,
+    annualExpenses,
+    annualCashFlow,
+    weeklyCashFlow,
+    score,
+  };
+}
+
+function parseNumber(value: string) {
+  const cleaned = value
+    .replace(/[$,%]/g, "")
+    .replace(/,/g, "")
+    .trim();
+
+  const result = Number(cleaned);
+
+  return Number.isFinite(result) ? result : null;
+}
+
+function matchesNaturalSearch(
+  property: Property,
+  query: string
+) {
+  if (!query.trim()) return true;
+
+  const q = query
+    .toLowerCase()
+    .replace(/,/g, " ")
+    .replace(/\$/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const analysis = calculateProperty(property);
+
+  const searchable = `
+    ${property.address}
+    ${property.suburb}
+    ${property.type}
+    ${property.beds} bedroom
+    ${property.baths} bathroom
+    ${property.beds} bed
+    ${property.baths} bath
+    ${property.price ?? ""}
+    ${property.rent}
+    ${property.capitalGrowth}
+    ${analysis.grossYield}
+    ${analysis.weeklyCashFlow}
+    ${analysis.score}
+  `.toLowerCase();
+
+  /*
+   * Plain text search.
+   */
+  if (
+    searchable.includes(q) ||
+    q.split(" ").every((word) =>
+      searchable.includes(word)
+    )
+  ) {
+    return true;
+  }
+
+  /*
+   * Property type.
+   */
+  if (
+    q.includes("house") &&
+    property.type === "House"
+  ) {
+    return true;
+  }
+
+  if (
+    q.includes("townhouse") &&
+    property.type === "Townhouse"
+  ) {
+    return true;
+  }
+
+  if (
+    (q.includes("unit") || q.includes("apartment")) &&
+    (property.type === "Unit" ||
+      property.type === "Apartment")
+  ) {
+    return true;
+  }
+
+  /*
+   * Bedroom searches.
+   */
+  const bedroomMatch = q.match(
+    /(\d+)\s*(?:bed|beds|bedroom|bedrooms)/
+  );
+
+  if (bedroomMatch) {
+    const beds = Number(bedroomMatch[1]);
+
+    if (
+      q.includes("plus") ||
+      q.includes("+")
+    ) {
+      if (property.beds >= beds) return true;
+    } else {
+      if (property.beds === beds) return true;
+    }
+  }
+
+  /*
+   * Price searches.
+   */
+  const underMatch = q.match(
+    /(?:under|below|less than|max)\s*(\d+(?:\.\d+)?)\s*(k|m)?/
+  );
+
+  if (underMatch) {
+    let value = Number(underMatch[1]);
+
+    if (underMatch[2] === "k") value *= 1000;
+    if (underMatch[2] === "m") value *= 1000000;
+
+    if (
+      property.price !== null &&
+      property.price <= value
+    ) {
+      return true;
+    }
+  }
+
+  /*
+   * Yield searches.
+   */
+  const yieldMatch = q.match(
+    /(?:yield|gross yield)\s*(?:over|above|>|at least)?\s*(\d+(?:\.\d+)?)/
+  );
+
+  if (yieldMatch) {
+    const requested = Number(yieldMatch[1]);
+
+    if (analysis.grossYield >= requested) {
+      return true;
+    }
+  }
+
+  /*
+   * Growth searches.
+   */
+  const growthMatch = q.match(
+    /(?:growth|capital growth)\s*(?:over|above|>|at least)?\s*(\d+(?:\.\d+)?)/
+  );
+
+  if (growthMatch) {
+    const requested = Number(growthMatch[1]);
+
+    if (
+      property.capitalGrowth >= requested
+    ) {
+      return true;
+    }
+  }
+
+  /*
+   * Cash-flow searches.
+   */
+  if (
+    q.includes("cash flow positive") ||
+    q.includes("positive cash flow")
+  ) {
+    return analysis.weeklyCashFlow > 0;
+  }
+
+  if (
+    q.includes("cash flow negative") ||
+    q.includes("negative cash flow")
+  ) {
+    return analysis.weeklyCashFlow < 0;
+  }
+
+  /*
+   * Score searches.
+   */
+  const scoreMatch = q.match(
+    /(?:score)\s*(?:over|above|>|at least)?\s*(\d+)/
+  );
+
+  if (scoreMatch) {
+    return (
+      analysis.score >= Number(scoreMatch[1])
+    );
+  }
+
+  return false;
+}
+
 export default function Home() {
-  const [selected, setSelected] = useState<Property>(properties[0]);
+  const [selected, setSelected] =
+    useState<Property>(properties[0]);
 
   const [query, setQuery] = useState("");
-  const [propertyFilter, setPropertyFilter] = useState("All");
 
-  const [price, setPrice] = useState(selected.price ?? 0);
-  const [rent, setRent] = useState(selected.rent);
-  const [loan, setLoan] = useState(selected.price ?? 0);
-  const [interest, setInterest] = useState(6);
-  const [expenses, setExpenses] = useState(7500);
-  const [loanTerm, setLoanTerm] = useState(30);
+  const [propertyFilter, setPropertyFilter] =
+    useState("All");
+
+  const [sort, setSort] =
+    useState("score");
+
+  const [priceMax, setPriceMax] =
+    useState("");
+
+  const [yieldMin, setYieldMin] =
+    useState("");
+
+  const [growthMin, setGrowthMin] =
+    useState("");
+
+  const [bedsMin, setBedsMin] =
+    useState("");
+
+  const [positiveCashFlow, setPositiveCashFlow] =
+    useState(false);
+
+  const [price, setPrice] =
+    useState(selected.price ?? 0);
+
+  const [rent, setRent] =
+    useState(selected.rent);
+
+  const [loan, setLoan] =
+    useState(selected.price ?? 0);
+
+  const [interest, setInterest] =
+    useState(6);
+
+  const [expenses, setExpenses] =
+    useState(7500);
+
+  const [loanTerm, setLoanTerm] =
+    useState(30);
 
   const [loanType, setLoanType] =
     useState<"P&I" | "Interest Only">("P&I");
 
-  const filteredProperties = properties.filter((property) => {
-    const matchesSearch =
-      `${property.address} ${property.suburb} ${property.type}`
-        .toLowerCase()
-        .includes(query.toLowerCase());
+  const filteredProperties =
+    useMemo(() => {
+      const result = properties.filter(
+        (property) => {
+          const analysis =
+            calculateProperty(property);
 
-    const matchesType =
-      propertyFilter === "All" ||
-      property.type === propertyFilter;
+          const matchesType =
+            propertyFilter === "All" ||
+            property.type === propertyFilter;
 
-    return matchesSearch && matchesType;
-  });
+          const matchesSearch =
+            matchesNaturalSearch(
+              property,
+              query
+            );
+
+          const matchesPrice =
+            !priceMax ||
+            property.price === null ||
+            property.price <=
+              Number(priceMax);
+
+          const matchesYield =
+            !yieldMin ||
+            analysis.grossYield >=
+              Number(yieldMin);
+
+          const matchesGrowth =
+            !growthMin ||
+            property.capitalGrowth >=
+              Number(growthMin);
+
+          const matchesBeds =
+            !bedsMin ||
+            property.beds >=
+              Number(bedsMin);
+
+          const matchesCash =
+            !positiveCashFlow ||
+            analysis.weeklyCashFlow > 0;
+
+          return (
+            matchesType &&
+            matchesSearch &&
+            matchesPrice &&
+            matchesYield &&
+            matchesGrowth &&
+            matchesBeds &&
+            matchesCash
+          );
+        }
+      );
+
+      return [...result].sort(
+        (a, b) => {
+          const aa =
+            calculateProperty(a);
+          const bb =
+            calculateProperty(b);
+
+          switch (sort) {
+            case "yield":
+              return (
+                bb.grossYield -
+                aa.grossYield
+              );
+
+            case "cashflow":
+              return (
+                bb.weeklyCashFlow -
+                aa.weeklyCashFlow
+              );
+
+            case "growth":
+              return (
+                b.capitalGrowth -
+                a.capitalGrowth
+              );
+
+            case "price":
+              return (
+                (a.price ?? Infinity) -
+                (b.price ?? Infinity)
+              );
+
+            default:
+              return (
+                bb.score -
+                aa.score
+              );
+          }
+        }
+      );
+    }, [
+      query,
+      propertyFilter,
+      sort,
+      priceMax,
+      yieldMin,
+      growthMin,
+      bedsMin,
+      positiveCashFlow,
+    ]);
 
   const analysis = useMemo(() => {
-    const annualRent = rent * 52;
+    const annualRent =
+      rent * 52;
 
     const grossYield =
-      price > 0 ? (annualRent / price) * 100 : 0;
+      price > 0
+        ? (annualRent / price) * 100
+        : 0;
 
-    const monthlyRate = interest / 100 / 12;
-    const payments = loanTerm * 12;
+    const monthlyRate =
+      interest / 100 / 12;
+
+    const payments =
+      loanTerm * 12;
 
     let monthlyRepayment = 0;
     let annualInterest = 0;
     let annualPrincipal = 0;
     let annualLoanRepayment = 0;
 
-    if (loanType === "Interest Only") {
-      annualInterest = loan * (interest / 100);
-      monthlyRepayment = annualInterest / 12;
-      annualLoanRepayment = annualInterest;
-    } else if (monthlyRate === 0) {
+    if (
+      loanType === "Interest Only"
+    ) {
+      annualInterest =
+        loan *
+        (interest / 100);
+
       monthlyRepayment =
-        payments > 0 ? loan / payments : 0;
+        annualInterest / 12;
+
+      annualLoanRepayment =
+        annualInterest;
+    } else if (
+      monthlyRate === 0
+    ) {
+      monthlyRepayment =
+        loan / payments;
 
       annualLoanRepayment =
         monthlyRepayment * 12;
 
-      annualPrincipal = annualLoanRepayment;
-    } else if (loan > 0) {
+      annualPrincipal =
+        annualLoanRepayment;
+    } else {
       monthlyRepayment =
         loan *
         ((monthlyRate *
-          Math.pow(1 + monthlyRate, payments)) /
-          (Math.pow(1 + monthlyRate, payments) - 1));
+          Math.pow(
+            1 + monthlyRate,
+            payments
+          )) /
+          (Math.pow(
+            1 + monthlyRate,
+            payments
+          ) - 1));
 
       annualLoanRepayment =
         monthlyRepayment * 12;
@@ -391,27 +499,37 @@ export default function Home() {
       let balance = loan;
       let firstYearInterest = 0;
 
-      for (let month = 0; month < 12; month++) {
+      for (
+        let month = 0;
+        month < 12;
+        month++
+      ) {
         const interestPayment =
           balance * monthlyRate;
 
         const principalPayment =
-          monthlyRepayment - interestPayment;
+          monthlyRepayment -
+          interestPayment;
 
-        firstYearInterest += interestPayment;
+        firstYearInterest +=
+          interestPayment;
 
         balance = Math.max(
           0,
-          balance - principalPayment
+          balance -
+            principalPayment
         );
       }
 
-      annualInterest = firstYearInterest;
+      annualInterest =
+        firstYearInterest;
 
-      annualPrincipal = Math.max(
-        0,
-        annualLoanRepayment - annualInterest
-      );
+      annualPrincipal =
+        Math.max(
+          0,
+          annualLoanRepayment -
+            annualInterest
+        );
     }
 
     const annualCashFlow =
@@ -422,20 +540,20 @@ export default function Home() {
     const weeklyCashFlow =
       annualCashFlow / 52;
 
-    const score =
-      price > 0
-        ? Math.max(
-            0,
-            Math.min(
-              100,
-              Math.round(
-                50 +
-                  (grossYield - 4) * 12 +
-                  weeklyCashFlow / 100
-              )
-            )
-          )
-        : 0;
+    const score = Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(
+          50 +
+            (grossYield - 4) * 12 +
+            weeklyCashFlow / 100 +
+            (selected.capitalGrowth -
+              4) *
+              5
+        )
+      )
+    );
 
     return {
       annualRent,
@@ -456,23 +574,32 @@ export default function Home() {
     expenses,
     loanTerm,
     loanType,
+    selected.capitalGrowth,
   ]);
 
-  function selectProperty(property: Property) {
+  function selectProperty(
+    property: Property
+  ) {
     setSelected(property);
 
-    const nextPrice = property.price ?? 0;
+    setPrice(
+      property.price ?? 0
+    );
 
-    setPrice(nextPrice);
     setRent(property.rent);
-    setLoan(nextPrice);
+
+    setLoan(
+      property.price ?? 0
+    );
   }
 
   return (
     <main className="app">
       <header className="nav">
         <div className="brand">
-          <div className="brandMark">⌂</div>
+          <div className="brandMark">
+            ⌂
+          </div>
 
           <div>
             <div className="brandName">
@@ -487,7 +614,7 @@ export default function Home() {
 
         <div className="navStatus">
           <span className="statusDot" />
-          V1 • ACT
+          V2 • ACT
         </div>
       </header>
 
@@ -500,12 +627,17 @@ export default function Home() {
           <h1>
             Find the property.
             <br />
-            <span>Run the numbers.</span>
+            <span>
+              Run the numbers.
+            </span>
           </h1>
 
           <p>
-            Analyse Canberra properties, rental returns,
-            financing and cash flow from one screen.
+            Search Canberra property
+            across price, suburb,
+            yield, cash flow,
+            capital growth and
+            investment score.
           </p>
         </div>
 
@@ -523,7 +655,9 @@ export default function Home() {
           </div>
 
           <div className="heroCardPrice">
-            {selected.priceDisplay}
+            {price > 0
+              ? money(price)
+              : "Price unavailable"}
           </div>
         </div>
       </section>
@@ -533,10 +667,12 @@ export default function Home() {
           <span>⌕</span>
 
           <input
-            placeholder="Search Canberra suburb or address..."
+            placeholder="Try: Gungahlin under 700k yield > 5 cash flow positive..."
             value={query}
             onChange={(e) =>
-              setQuery(e.target.value)
+              setQuery(
+                e.target.value
+              )
             }
           />
         </div>
@@ -546,17 +682,21 @@ export default function Home() {
             "All",
             "House",
             "Townhouse",
+            "Unit",
             "Apartment",
           ].map((type) => (
             <button
               key={type}
               className={
-                propertyFilter === type
+                propertyFilter ===
+                type
                   ? "filter active"
                   : "filter"
               }
               onClick={() =>
-                setPropertyFilter(type)
+                setPropertyFilter(
+                  type
+                )
               }
             >
               {type}
@@ -565,60 +705,235 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="propertyStrip">
-        {filteredProperties.map((property) => {
-          const propertyYield =
-            property.price && property.price > 0
-              ? ((property.rent * 52) /
-                  property.price) *
-                100
-              : null;
+      <section className="advancedSearch glass">
+        <div className="advancedHeader">
+          <div>
+            <div className="eyebrow">
+              SMART FILTERS
+            </div>
 
-          const active =
-            selected.id === property.id;
+            <h3>
+              Investment search
+            </h3>
+          </div>
 
-          return (
-            <button
-              key={property.id}
-              className={
-                active
-                  ? "propertyMini active"
-                  : "propertyMini"
+          <strong>
+            {filteredProperties.length}{" "}
+            matches
+          </strong>
+        </div>
+
+        <div className="advancedGrid">
+          <div className="filterField">
+            <label>
+              MAX PRICE
+            </label>
+
+            <input
+              type="number"
+              placeholder="e.g. 800000"
+              value={priceMax}
+              onChange={(e) =>
+                setPriceMax(
+                  e.target.value
+                )
               }
-              onClick={() =>
-                selectProperty(property)
+            />
+          </div>
+
+          <div className="filterField">
+            <label>
+              MIN YIELD %
+            </label>
+
+            <input
+              type="number"
+              step="0.1"
+              placeholder="e.g. 4.5"
+              value={yieldMin}
+              onChange={(e) =>
+                setYieldMin(
+                  e.target.value
+                )
+              }
+            />
+          </div>
+
+          <div className="filterField">
+            <label>
+              MIN GROWTH %
+            </label>
+
+            <input
+              type="number"
+              step="0.1"
+              placeholder="e.g. 4"
+              value={growthMin}
+              onChange={(e) =>
+                setGrowthMin(
+                  e.target.value
+                )
+              }
+            />
+          </div>
+
+          <div className="filterField">
+            <label>
+              MIN BEDROOMS
+            </label>
+
+            <select
+              value={bedsMin}
+              onChange={(e) =>
+                setBedsMin(
+                  e.target.value
+                )
               }
             >
-              <div className="miniTop">
-                <span>{property.type}</span>
+              <option value="">
+                Any
+              </option>
 
-                <b>
-                  {propertyYield !== null
-                    ? `${propertyYield.toFixed(1)}%`
-                    : "—"}
-                </b>
-              </div>
+              <option value="1">
+                1+
+              </option>
 
-              <strong>
-                {property.address}
-              </strong>
+              <option value="2">
+                2+
+              </option>
 
-              <small>
-                {property.suburb}
-              </small>
+              <option value="3">
+                3+
+              </option>
 
-              <div className="miniBottom">
-                <b>
-                  {property.priceDisplay}
-                </b>
+              <option value="4">
+                4+
+              </option>
+            </select>
+          </div>
 
-                <span>
-                  ${property.rent}/wk*
-                </span>
-              </div>
-            </button>
-          );
-        })}
+          <div className="filterField">
+            <label>
+              SORT BY
+            </label>
+
+            <select
+              value={sort}
+              onChange={(e) =>
+                setSort(
+                  e.target.value
+                )
+              }
+            >
+              <option value="score">
+                Investment Score
+              </option>
+
+              <option value="yield">
+                Gross Yield
+              </option>
+
+              <option value="cashflow">
+                Cash Flow
+              </option>
+
+              <option value="growth">
+                Capital Growth
+              </option>
+
+              <option value="price">
+                Lowest Price
+              </option>
+            </select>
+          </div>
+
+          <button
+            className={
+              positiveCashFlow
+                ? "cashFilter active"
+                : "cashFilter"
+            }
+            onClick={() =>
+              setPositiveCashFlow(
+                !positiveCashFlow
+              )
+            }
+          >
+            <span>
+              ✓
+            </span>
+
+            Positive cash flow
+          </button>
+        </div>
+      </section>
+
+      <section className="propertyStrip">
+        {filteredProperties.map(
+          (property) => {
+            const propertyAnalysis =
+              calculateProperty(
+                property
+              );
+
+            const active =
+              selected.id ===
+              property.id;
+
+            return (
+              <button
+                key={property.id}
+                className={
+                  active
+                    ? "propertyMini active"
+                    : "propertyMini"
+                }
+                onClick={() =>
+                  selectProperty(
+                    property
+                  )
+                }
+              >
+                <div className="miniTop">
+                  <span>
+                    {property.type}
+                  </span>
+
+                  <b>
+                    {propertyAnalysis.grossYield.toFixed(
+                      1
+                    )}
+                    %
+                  </b>
+                </div>
+
+                <strong>
+                  {property.address}
+                </strong>
+
+                <small>
+                  {property.suburb}
+                </small>
+
+                <div className="miniBottom">
+                  <b>
+                    {property.price
+                      ? money(
+                          property.price
+                        )
+                      : "Price est."}
+                  </b>
+
+                  <span>
+                    ~$
+                    {property.rent}
+                    /wk
+                  </span>
+                </div>
+              </button>
+            );
+          }
+        )}
       </section>
 
       <section className="dashboard">
@@ -640,57 +955,74 @@ export default function Home() {
               {selected.baths} bath
               <span>•</span>
               {selected.cars} car
-              {selected.landSize ? (
-                <>
-                  <span>•</span>
-                  {selected.landSize}m²
-                </>
-              ) : null}
             </p>
           </div>
 
           <div className="scoreBox">
-            <div>INVESTMENT SCORE</div>
+            <div>
+              INVESTMENT SCORE
+            </div>
 
             <strong>
               {analysis.score}
             </strong>
 
-            <span>/100</span>
+            <span>
+              /100
+            </span>
           </div>
         </div>
 
         <div className="snapshotGrid">
           <div className="metric glass">
-            <span>GROSS YIELD</span>
+            <span>
+              GROSS YIELD
+            </span>
 
             <strong>
-              {analysis.grossYield.toFixed(2)}%
+              {analysis.grossYield.toFixed(
+                2
+              )}
+              %
             </strong>
 
             <small>
-              Based on current rent assumption
+              Based on{" "}
+              {selected.rentStatus ===
+              "estimated"
+                ? "estimated"
+                : "verified"}{" "}
+              rent
             </small>
           </div>
 
           <div className="metric glass">
-            <span>WEEKLY RENT</span>
+            <span>
+              WEEKLY RENT
+            </span>
 
             <strong>
-              {money(rent)}
+              ~$
+              {number(rent)}
             </strong>
 
             <small>
-              Editable assumption
+              {selected.rentStatus ===
+              "estimated"
+                ? "ESTIMATED"
+                : "VERIFIED"}
             </small>
           </div>
 
           <div className="metric glass">
-            <span>WEEKLY CASH FLOW</span>
+            <span>
+              WEEKLY CASH FLOW
+            </span>
 
             <strong
               className={
-                analysis.weeklyCashFlow >= 0
+                analysis.weeklyCashFlow >=
+                0
                   ? "green"
                   : "red"
               }
@@ -706,16 +1038,22 @@ export default function Home() {
           </div>
 
           <div className="metric glass">
-            <span>LAND SIZE</span>
+            <span>
+              CAPITAL GROWTH
+            </span>
 
             <strong>
-              {selected.landSize
-                ? `${selected.landSize}m²`
-                : "—"}
+              {selected.capitalGrowth.toFixed(
+                1
+              )}
+              %
             </strong>
 
             <small>
-              Where available
+              {selected.capitalGrowthStatus ===
+              "estimated"
+                ? "ESTIMATED"
+                : "VERIFIED"}
             </small>
           </div>
         </div>
@@ -746,25 +1084,29 @@ export default function Home() {
                 </label>
 
                 <div className="inputMoney">
-                  <span>$</span>
+                  <span>
+                    $
+                  </span>
 
                   <input
                     type="number"
                     value={price}
                     onChange={(e) =>
                       setPrice(
-                        Number(e.target.value)
+                        Number(
+                          e.target.value
+                        )
                       )
                     }
                   />
                 </div>
 
-                {selected.price === null && (
-                  <small>
-                    Enter a price to analyse this
-                    property.
-                  </small>
-                )}
+                <small>
+                  {selected.priceStatus ===
+                  "estimated"
+                    ? "ESTIMATED"
+                    : "VERIFIED LISTING PRICE"}
+                </small>
               </div>
 
               <div className="field">
@@ -773,23 +1115,29 @@ export default function Home() {
                 </label>
 
                 <div className="inputMoney">
-                  <span>$</span>
+                  <span>
+                    $
+                  </span>
 
                   <input
                     type="number"
                     value={rent}
                     onChange={(e) =>
                       setRent(
-                        Number(e.target.value)
+                        Number(
+                          e.target.value
+                        )
                       )
                     }
                   />
 
-                  <em>/wk</em>
+                  <em>
+                    /wk
+                  </em>
                 </div>
 
                 <small>
-                  *Initial estimate — editable
+                  Editable assumption
                 </small>
               </div>
 
@@ -799,14 +1147,18 @@ export default function Home() {
                 </label>
 
                 <div className="inputMoney">
-                  <span>$</span>
+                  <span>
+                    $
+                  </span>
 
                   <input
                     type="number"
                     value={loan}
                     onChange={(e) =>
                       setLoan(
-                        Number(e.target.value)
+                        Number(
+                          e.target.value
+                        )
                       )
                     }
                   />
@@ -823,19 +1175,25 @@ export default function Home() {
                 </label>
 
                 <div className="inputMoney">
-                  <span>$</span>
+                  <span>
+                    $
+                  </span>
 
                   <input
                     type="number"
                     value={expenses}
                     onChange={(e) =>
                       setExpenses(
-                        Number(e.target.value)
+                        Number(
+                          e.target.value
+                        )
                       )
                     }
                   />
 
-                  <em>/yr</em>
+                  <em>
+                    /yr
+                  </em>
                 </div>
               </div>
             </div>
@@ -853,7 +1211,10 @@ export default function Home() {
                 </div>
 
                 <strong>
-                  {interest.toFixed(2)}%
+                  {interest.toFixed(
+                    2
+                  )}
+                  %
                 </strong>
               </div>
 
@@ -866,14 +1227,21 @@ export default function Home() {
                 value={interest}
                 onChange={(e) =>
                   setInterest(
-                    Number(e.target.value)
+                    Number(
+                      e.target.value
+                    )
                   )
                 }
               />
 
               <div className="rangeLabels">
-                <span>2%</span>
-                <span>10%</span>
+                <span>
+                  2%
+                </span>
+
+                <span>
+                  10%
+                </span>
               </div>
             </div>
 
@@ -892,15 +1260,19 @@ export default function Home() {
                 <div className="segmented">
                   <button
                     className={
-                      loanType === "P&I"
+                      loanType ===
+                      "P&I"
                         ? "selected"
                         : ""
                     }
                     onClick={() =>
-                      setLoanType("P&I")
+                      setLoanType(
+                        "P&I"
+                      )
                     }
                   >
-                    Principal & Interest
+                    Principal &
+                    Interest
                   </button>
 
                   <button
@@ -924,7 +1296,9 @@ export default function Home() {
                   value={loanTerm}
                   onChange={(e) =>
                     setLoanTerm(
-                      Number(e.target.value)
+                      Number(
+                        e.target.value
+                      )
                     )
                   }
                 >
@@ -949,12 +1323,14 @@ export default function Home() {
 
             {selected.listingUrl && (
               <a
-                href={selected.listingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="listingButton"
+                href={
+                  selected.listingUrl
+                }
+                target="_blank"
+                rel="noreferrer"
               >
-                View original listing ↗
+                VIEW ORIGINAL LISTING ↗
               </a>
             )}
           </div>
@@ -979,7 +1355,8 @@ export default function Home() {
 
               <strong
                 className={
-                  analysis.weeklyCashFlow >= 0
+                  analysis.weeklyCashFlow >=
+                  0
                     ? "green"
                     : "red"
                 }
@@ -990,9 +1367,7 @@ export default function Home() {
               </strong>
 
               <small>
-                {analysis.weeklyCashFlow >= 0
-                  ? "Positive cash flow"
-                  : "Negative cash flow"}
+                Based on current assumptions
               </small>
             </div>
 
@@ -1003,7 +1378,8 @@ export default function Home() {
                 </span>
 
                 <b className="green">
-                  +{money(
+                  +
+                  {money(
                     analysis.annualRent
                   )}
                 </b>
@@ -1015,7 +1391,8 @@ export default function Home() {
                 </span>
 
                 <b>
-                  -{money(
+                  -
+                  {money(
                     analysis.annualLoanRepayment
                   )}
                 </b>
@@ -1027,7 +1404,8 @@ export default function Home() {
                 </span>
 
                 <b>
-                  -{money(
+                  -
+                  {money(
                     analysis.annualInterest
                   )}
                 </b>
@@ -1051,7 +1429,10 @@ export default function Home() {
                 </span>
 
                 <b>
-                  -{money(expenses)}
+                  -
+                  {money(
+                    expenses
+                  )}
                 </b>
               </div>
 
@@ -1062,7 +1443,8 @@ export default function Home() {
 
                 <strong
                   className={
-                    analysis.annualCashFlow >= 0
+                    analysis.annualCashFlow >=
+                    0
                       ? "green"
                       : "red"
                   }
@@ -1109,18 +1491,18 @@ export default function Home() {
 
           <div>
             <strong>
-              V1 live Canberra dataset
+              Data transparency
             </strong>
 
             <p>
-              Properties are based on current
-              Canberra market listings. Asking
-              prices marked as auction/contact
-              agent are intentionally not guessed.
-              Rental figures are initial editable
-              assumptions and should be replaced
-              with verified rental evidence as we
-              build the data integration.
+              Listing information is sourced
+              from current public property
+              search results. Prices, rents
+              and capital growth are clearly
+              identified as verified or
+              estimated. Estimates are
+              assumptions for investment
+              analysis, not guarantees.
             </p>
           </div>
         </div>
