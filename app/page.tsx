@@ -61,39 +61,50 @@ const properties: Property[] = [
   },
 ];
 
-const money = (n: number) =>
+const money = (value: number) =>
   new Intl.NumberFormat("en-AU", {
     style: "currency",
     currency: "AUD",
     maximumFractionDigits: 0,
-  }).format(n);
+  }).format(value);
 
 export default function Home() {
   const [selected, setSelected] = useState<Property>(properties[0]);
+
   const [query, setQuery] = useState("");
+  const [propertyFilter, setPropertyFilter] = useState("All");
 
   const [price, setPrice] = useState(selected.price);
   const [rent, setRent] = useState(selected.rent);
-  const [interest, setInterest] = useState(6);
   const [loan, setLoan] = useState(selected.price);
+  const [interest, setInterest] = useState(6);
   const [expenses, setExpenses] = useState(7500);
-
-  const [loanType, setLoanType] = useState<"P&I" | "Interest Only">("P&I");
   const [loanTerm, setLoanTerm] = useState(30);
 
-  const filtered = properties.filter((p) =>
-    `${p.address} ${p.suburb} ${p.type}`
-      .toLowerCase()
-      .includes(query.toLowerCase())
-  );
+  const [loanType, setLoanType] =
+    useState<"P&I" | "Interest Only">("P&I");
+
+  const filteredProperties = properties.filter((property) => {
+    const matchesSearch =
+      `${property.address} ${property.suburb} ${property.type}`
+        .toLowerCase()
+        .includes(query.toLowerCase());
+
+    const matchesType =
+      propertyFilter === "All" ||
+      property.type === propertyFilter;
+
+    return matchesSearch && matchesType;
+  });
 
   const analysis = useMemo(() => {
     const annualRent = rent * 52;
 
-    const grossYield = price > 0 ? (annualRent / price) * 100 : 0;
+    const grossYield =
+      price > 0 ? (annualRent / price) * 100 : 0;
 
     const monthlyRate = interest / 100 / 12;
-    const numberOfPayments = loanTerm * 12;
+    const payments = loanTerm * 12;
 
     let monthlyRepayment = 0;
     let annualInterest = 0;
@@ -106,32 +117,39 @@ export default function Home() {
       annualLoanRepayment = annualInterest;
       annualPrincipal = 0;
     } else if (monthlyRate === 0) {
-      monthlyRepayment = loan / numberOfPayments;
+      monthlyRepayment = loan / payments;
       annualLoanRepayment = monthlyRepayment * 12;
       annualPrincipal = annualLoanRepayment;
-      annualInterest = 0;
     } else {
       monthlyRepayment =
         loan *
-        (monthlyRate *
-          Math.pow(1 + monthlyRate, numberOfPayments)) /
-        (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+        ((monthlyRate *
+          Math.pow(1 + monthlyRate, payments)) /
+          (Math.pow(1 + monthlyRate, payments) - 1));
 
-      annualLoanRepayment = monthlyRepayment * 12;
+      annualLoanRepayment =
+        monthlyRepayment * 12;
 
-      const firstYearInterest = loan * monthlyRate;
       let balance = loan;
-      let interestFirstYear = 0;
+      let firstYearInterest = 0;
 
       for (let month = 0; month < 12; month++) {
-        const interestPayment = balance * monthlyRate;
-        const principalPayment = monthlyRepayment - interestPayment;
+        const interestPayment =
+          balance * monthlyRate;
 
-        interestFirstYear += interestPayment;
-        balance = Math.max(0, balance - principalPayment);
+        const principalPayment =
+          monthlyRepayment - interestPayment;
+
+        firstYearInterest += interestPayment;
+
+        balance = Math.max(
+          0,
+          balance - principalPayment
+        );
       }
 
-      annualInterest = interestFirstYear;
+      annualInterest = firstYearInterest;
+
       annualPrincipal = Math.max(
         0,
         annualLoanRepayment - annualInterest
@@ -139,9 +157,12 @@ export default function Home() {
     }
 
     const annualCashFlow =
-      annualRent - annualLoanRepayment - expenses;
+      annualRent -
+      annualLoanRepayment -
+      expenses;
 
-    const weeklyCashFlow = annualCashFlow / 52;
+    const weeklyCashFlow =
+      annualCashFlow / 52;
 
     const score = Math.max(
       0,
@@ -169,305 +190,451 @@ export default function Home() {
   }, [
     price,
     rent,
-    interest,
     loan,
+    interest,
     expenses,
-    loanType,
     loanTerm,
+    loanType,
   ]);
 
-  function chooseProperty(property: Property) {
+  function selectProperty(property: Property) {
     setSelected(property);
+
     setPrice(property.price);
     setRent(property.rent);
+
+    // Default to 100% borrowing
     setLoan(property.price);
   }
 
   return (
-    <main>
-      <header className="topbar">
-        <div>
-          <div className="eyebrow">ACT • V1</div>
+    <main className="app">
+      <header className="nav">
+        <div className="brand">
+          <div className="brandMark">⌂</div>
 
-          <h1>Canberra Property Scanner</h1>
+          <div>
+            <div className="brandName">
+              Canberra Property Scanner
+            </div>
 
-          <p>
-            Find a property, run the numbers, and decide if it
-            deserves a closer look.
-          </p>
+            <div className="brandSub">
+              ACT PROPERTY ANALYSIS
+            </div>
+          </div>
         </div>
 
-        <div className="pill">Skeleton mode</div>
+        <div className="navStatus">
+          <span className="statusDot" />
+          V1 • ACT
+        </div>
       </header>
 
       <section className="hero">
-        <div>
-          <span className="eyebrow">PROPERTY INVESTING</span>
+        <div className="heroContent">
+          <div className="heroEyebrow">
+            PROPERTY INVESTMENT
+          </div>
 
-          <h2>
-            Scan Canberra properties in seconds.
-          </h2>
+          <h1>
+            Find the property.
+            <br />
+            <span>Run the numbers.</span>
+          </h1>
 
           <p>
-            Analyse purchase price, rental income, financing,
-            expenses and cash flow from one screen.
+            Analyse Canberra properties, rental returns,
+            financing and cash flow from one screen.
           </p>
         </div>
 
-        <div className="heroStat">
-          <span>Selected property</span>
+        <div className="heroCard">
+          <div className="heroCardLabel">
+            CURRENT PROPERTY
+          </div>
 
-          <strong>{selected.suburb}</strong>
+          <div className="heroCardAddress">
+            {selected.address}
+          </div>
 
-          <small>{selected.type}</small>
+          <div className="heroCardLocation">
+            {selected.suburb}, ACT
+          </div>
+
+          <div className="heroCardPrice">
+            {money(price)}
+          </div>
         </div>
       </section>
 
-      <div className="layout">
-        <aside className="sidebar">
-          <div className="sectionTitle">
-            <div>
-              <span className="eyebrow">
-                ACT PROPERTIES
-              </span>
-
-              <h3>Property search</h3>
-            </div>
-
-            <span className="count">
-              {filtered.length}
-            </span>
-          </div>
+      <section className="searchPanel">
+        <div className="searchBox">
+          <span>⌕</span>
 
           <input
-            className="search"
-            placeholder="Search suburb, address or type..."
+            placeholder="Search Canberra suburb or address..."
             value={query}
             onChange={(e) =>
               setQuery(e.target.value)
             }
           />
+        </div>
 
-          <div className="cards">
-            {filtered.map((property) => {
-              const propertyYield =
-                (property.rent * 52) /
-                property.price *
-                100;
+        <div className="filters">
+          {[
+            "All",
+            "House",
+            "Townhouse",
+            "Unit",
+          ].map((type) => (
+            <button
+              key={type}
+              className={
+                propertyFilter === type
+                  ? "filter active"
+                  : "filter"
+              }
+              onClick={() =>
+                setPropertyFilter(type)
+              }
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+      </section>
 
-              return (
-                <button
-                  className={`propertyCard ${
-                    selected.id === property.id
-                      ? "active"
-                      : ""
-                  }`}
-                  key={property.id}
-                  onClick={() =>
-                    chooseProperty(property)
-                  }
-                >
-                  <div className="cardTop">
-                    <span className="type">
-                      {property.type}
-                    </span>
+      <section className="propertyStrip">
+        {filteredProperties.map((property) => {
+          const propertyYield =
+            (property.rent * 52) /
+            property.price *
+            100;
 
-                    <span className="yield">
-                      {propertyYield.toFixed(1)}% yield
-                    </span>
-                  </div>
+          const active =
+            selected.id === property.id;
 
-                  <strong>
-                    {property.address}
-                  </strong>
+          return (
+            <button
+              key={property.id}
+              className={
+                active
+                  ? "propertyMini active"
+                  : "propertyMini"
+              }
+              onClick={() =>
+                selectProperty(property)
+              }
+            >
+              <div className="miniTop">
+                <span>{property.type}</span>
 
-                  <span className="suburb">
-                    {property.suburb}, ACT
-                  </span>
-
-                  <div className="cardBottom">
-                    <b>
-                      {money(property.price)}
-                    </b>
-
-                    <span>
-                      ${property.rent}/wk
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </aside>
-
-        <section className="analysis">
-          <div className="propertyHeader">
-            <div>
-              <span className="eyebrow">
-                {selected.type.toUpperCase()}
-              </span>
-
-              <h2>
-                {selected.address}
-              </h2>
-
-              <p>
-                {selected.suburb}, ACT •{" "}
-                {selected.beds} bed •{" "}
-                {selected.baths} bath
-              </p>
-            </div>
-
-            <div className="score">
-              <span>
-                INVESTMENT SCORE
-              </span>
+                <b>
+                  {propertyYield.toFixed(1)}%
+                </b>
+              </div>
 
               <strong>
-                {analysis.score}
+                {property.address}
               </strong>
 
-              <small>/100</small>
-            </div>
-          </div>
+              <small>
+                {property.suburb}
+              </small>
 
-          <div className="metrics">
-            <div>
-              <span>Gross yield</span>
+              <div className="miniBottom">
+                <b>
+                  {money(property.price)}
+                </b>
 
-              <strong>
-                {analysis.grossYield.toFixed(2)}%
-              </strong>
-            </div>
-
-            <div>
-              <span>Weekly cash flow</span>
-
-              <strong
-                className={
-                  analysis.weeklyCashFlow >= 0
-                    ? "positive"
-                    : "negative"
-                }
-              >
-                {money(
-                  analysis.weeklyCashFlow
-                )}
-              </strong>
-            </div>
-
-            <div>
-              <span>Annual rent</span>
-
-              <strong>
-                {money(
-                  analysis.annualRent
-                )}
-              </strong>
-            </div>
-
-            <div>
-              <span>Land value</span>
-
-              <strong>
-                {money(
-                  selected.landValue
-                )}
-              </strong>
-            </div>
-          </div>
-
-          <div className="panel">
-            <div className="panelHeader">
-              <div>
-                <span className="eyebrow">
-                  LIVE CALCULATOR
+                <span>
+                  ${property.rent}/wk
                 </span>
+              </div>
+            </button>
+          );
+        })}
+      </section>
+
+      <section className="dashboard">
+        <div className="propertyIntro glass">
+          <div>
+            <div className="eyebrow">
+              {selected.type.toUpperCase()}
+            </div>
+
+            <h2>
+              {selected.address}
+            </h2>
+
+            <p>
+              {selected.suburb}, ACT
+              <span>•</span>
+              {selected.beds} bed
+              <span>•</span>
+              {selected.baths} bath
+            </p>
+          </div>
+
+          <div className="scoreBox">
+            <div>INVESTMENT SCORE</div>
+
+            <strong>
+              {analysis.score}
+            </strong>
+
+            <span>/100</span>
+          </div>
+        </div>
+
+        <div className="snapshotGrid">
+          <div className="metric glass">
+            <span>GROSS YIELD</span>
+
+            <strong>
+              {analysis.grossYield.toFixed(2)}%
+            </strong>
+
+            <small>
+              Based on current rent
+            </small>
+          </div>
+
+          <div className="metric glass">
+            <span>WEEKLY RENT</span>
+
+            <strong>
+              {money(rent)}
+            </strong>
+
+            <small>
+              Editable assumption
+            </small>
+          </div>
+
+          <div className="metric glass">
+            <span>WEEKLY CASH FLOW</span>
+
+            <strong
+              className={
+                analysis.weeklyCashFlow >= 0
+                  ? "green"
+                  : "red"
+              }
+            >
+              {money(
+                analysis.weeklyCashFlow
+              )}
+            </strong>
+
+            <small>
+              After loan + expenses
+            </small>
+          </div>
+
+          <div className="metric glass">
+            <span>LAND VALUE</span>
+
+            <strong>
+              {money(
+                selected.landValue
+              )}
+            </strong>
+
+            <small>
+              ACT unimproved value
+            </small>
+          </div>
+        </div>
+
+        <div className="mainGrid">
+          <div className="glass assumptions">
+            <div className="sectionHeading">
+              <div>
+                <div className="eyebrow">
+                  LIVE CALCULATOR
+                </div>
 
                 <h3>
                   Investment assumptions
                 </h3>
               </div>
 
-              <span className="live">
-                ● LIVE
-              </span>
+              <div className="liveBadge">
+                <span />
+                LIVE
+              </div>
             </div>
 
-            <div className="inputs">
-              <label>
-                Purchase price
+            <div className="fieldGrid">
+              <div className="field">
+                <label>
+                  PURCHASE PRICE
+                </label>
 
-                <input
-                  type="number"
-                  value={price}
-                  onChange={(e) =>
-                    setPrice(
-                      Number(e.target.value)
-                    )
-                  }
-                />
-              </label>
+                <div className="inputMoney">
+                  <span>$</span>
 
-              <label>
-                Weekly rent
+                  <input
+                    type="number"
+                    value={price}
+                    onChange={(e) =>
+                      setPrice(
+                        Number(e.target.value)
+                      )
+                    }
+                  />
+                </div>
+              </div>
 
-                <input
-                  type="number"
-                  value={rent}
-                  onChange={(e) =>
-                    setRent(
-                      Number(e.target.value)
-                    )
-                  }
-                />
-              </label>
+              <div className="field">
+                <label>
+                  WEEKLY RENT
+                </label>
 
-              <label>
-                Loan amount
+                <div className="inputMoney">
+                  <span>$</span>
 
-                <input
-                  type="number"
-                  value={loan}
-                  onChange={(e) =>
-                    setLoan(
-                      Number(e.target.value)
-                    )
-                  }
-                />
-              </label>
+                  <input
+                    type="number"
+                    value={rent}
+                    onChange={(e) =>
+                      setRent(
+                        Number(e.target.value)
+                      )
+                    }
+                  />
 
-              <label>
-                Interest rate %
+                  <em>/wk</em>
+                </div>
+              </div>
 
-                <input
-                  type="number"
-                  step="0.1"
-                  value={interest}
-                  onChange={(e) =>
-                    setInterest(
-                      Number(e.target.value)
-                    )
-                  }
-                />
-              </label>
+              <div className="field">
+                <label>
+                  LOAN AMOUNT
+                </label>
 
-              <label>
-                Annual expenses
+                <div className="inputMoney">
+                  <span>$</span>
 
-                <input
-                  type="number"
-                  value={expenses}
-                  onChange={(e) =>
-                    setExpenses(
-                      Number(e.target.value)
-                    )
-                  }
-                />
-              </label>
+                  <input
+                    type="number"
+                    value={loan}
+                    onChange={(e) =>
+                      setLoan(
+                        Number(e.target.value)
+                      )
+                    }
+                  />
+                </div>
 
-              <label>
-                Loan term
+                <small>
+                  Default: 100% borrowing
+                </small>
+              </div>
+
+              <div className="field">
+                <label>
+                  ANNUAL EXPENSES
+                </label>
+
+                <div className="inputMoney">
+                  <span>$</span>
+
+                  <input
+                    type="number"
+                    value={expenses}
+                    onChange={(e) =>
+                      setExpenses(
+                        Number(e.target.value)
+                      )
+                    }
+                  />
+
+                  <em>/yr</em>
+                </div>
+              </div>
+            </div>
+
+            <div className="rateSection">
+              <div className="rateHeader">
+                <div>
+                  <label>
+                    INTEREST RATE
+                  </label>
+
+                  <small>
+                    Current assumption
+                  </small>
+                </div>
+
+                <strong>
+                  {interest.toFixed(2)}%
+                </strong>
+              </div>
+
+              <input
+                className="range"
+                type="range"
+                min="2"
+                max="10"
+                step="0.05"
+                value={interest}
+                onChange={(e) =>
+                  setInterest(
+                    Number(e.target.value)
+                  )
+                }
+              />
+
+              <div className="rangeLabels">
+                <span>2%</span>
+                <span>10%</span>
+              </div>
+            </div>
+
+            <div className="loanSection">
+              <div className="loanHeader">
+                <label>
+                  LOAN TYPE
+                </label>
+
+                <label>
+                  LOAN TERM
+                </label>
+              </div>
+
+              <div className="loanControls">
+                <div className="segmented">
+                  <button
+                    className={
+                      loanType === "P&I"
+                        ? "selected"
+                        : ""
+                    }
+                    onClick={() =>
+                      setLoanType("P&I")
+                    }
+                  >
+                    Principal & Interest
+                  </button>
+
+                  <button
+                    className={
+                      loanType ===
+                      "Interest Only"
+                        ? "selected"
+                        : ""
+                    }
+                    onClick={() =>
+                      setLoanType(
+                        "Interest Only"
+                      )
+                    }
+                  >
+                    Interest Only
+                  </button>
+                </div>
 
                 <select
                   value={loanTerm}
@@ -493,63 +660,55 @@ export default function Home() {
                     35 years
                   </option>
                 </select>
-              </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="glass cashflow">
+            <div className="sectionHeading">
+              <div>
+                <div className="eyebrow">
+                  CASH FLOW
+                </div>
+
+                <h3>
+                  Investment result
+                </h3>
+              </div>
             </div>
 
-            <div className="loanType">
-              <span>Loan type</span>
+            <div className="cashHero">
+              <span>
+                ESTIMATED WEEKLY CASH FLOW
+              </span>
 
-              <div className="loanButtons">
-                <button
-                  className={
-                    loanType === "P&I"
-                      ? "selected"
-                      : ""
-                  }
-                  onClick={() =>
-                    setLoanType("P&I")
-                  }
-                >
-                  Principal & Interest
-                </button>
+              <strong
+                className={
+                  analysis.weeklyCashFlow >= 0
+                    ? "green"
+                    : "red"
+                }
+              >
+                {money(
+                  analysis.weeklyCashFlow
+                )}
+              </strong>
 
-                <button
-                  className={
-                    loanType === "Interest Only"
-                      ? "selected"
-                      : ""
-                  }
-                  onClick={() =>
-                    setLoanType(
-                      "Interest Only"
-                    )
-                  }
-                >
-                  Interest Only
-                </button>
-              </div>
+              <small>
+                {analysis.weeklyCashFlow >= 0
+                  ? "Positive cash flow"
+                  : "Negative cash flow"}
+              </small>
             </div>
 
             <div className="breakdown">
               <div>
                 <span>
-                  Monthly loan repayment
+                  Annual rental income
                 </span>
 
-                <b>
-                  {money(
-                    analysis.monthlyRepayment
-                  )}
-                </b>
-              </div>
-
-              <div>
-                <span>
-                  Annual rent
-                </span>
-
-                <b>
-                  {money(
+                <b className="green">
+                  +{money(
                     analysis.annualRent
                   )}
                 </b>
@@ -557,7 +716,19 @@ export default function Home() {
 
               <div>
                 <span>
-                  Annual interest
+                  Annual loan repayment
+                </span>
+
+                <b>
+                  -{money(
+                    analysis.annualLoanRepayment
+                  )}
+                </b>
+              </div>
+
+              <div>
+                <span>
+                  Interest — Year 1
                 </span>
 
                 <b>
@@ -569,10 +740,10 @@ export default function Home() {
 
               <div>
                 <span>
-                  Principal paid — Year 1
+                  Principal — Year 1
                 </span>
 
-                <b>
+                <b className="blue">
                   {money(
                     analysis.annualPrincipal
                   )}
@@ -589,53 +760,73 @@ export default function Home() {
                 </b>
               </div>
 
-              <div className="total">
+              <div className="breakdownTotal">
                 <span>
-                  Estimated annual cash flow
+                  Annual cash flow
                 </span>
 
-                <b
+                <strong
                   className={
                     analysis.annualCashFlow >= 0
-                      ? "positive"
-                      : "negative"
+                      ? "green"
+                      : "red"
                   }
                 >
                   {money(
                     analysis.annualCashFlow
                   )}
-                </b>
+                </strong>
               </div>
+            </div>
 
-              <div className="total">
+            <div className="repayment">
+              <div>
                 <span>
-                  Estimated weekly cash flow
+                  MONTHLY REPAYMENT
                 </span>
 
-                <b
-                  className={
-                    analysis.weeklyCashFlow >= 0
-                      ? "positive"
-                      : "negative"
-                  }
-                >
+                <strong>
                   {money(
-                    analysis.weeklyCashFlow
+                    analysis.monthlyRepayment
                   )}
-                </b>
+                </strong>
+              </div>
+
+              <div>
+                <span>
+                  PRINCIPAL PAID — YEAR 1
+                </span>
+
+                <strong>
+                  {money(
+                    analysis.annualPrincipal
+                  )}
+                </strong>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="note">
-            <strong>Next:</strong>{" "}
-            connect legitimate ACT/Domain data sources,
-            add sales history and rental evidence,
-            then replace the sample properties with
-            live property records.
+        <div className="bottomNote glass">
+          <div className="noteIcon">
+            ✓
           </div>
-        </section>
-      </div>
+
+          <div>
+            <strong>
+              V1 investment engine
+            </strong>
+
+            <p>
+              These calculations are estimates.
+              Next we'll connect legitimate ACT
+              property data, sales history and rental
+              evidence so the scanner can analyse
+              real properties automatically.
+            </p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
